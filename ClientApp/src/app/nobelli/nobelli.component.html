@@ -1,0 +1,46 @@
+<mat-drawer-container autosize>
+  <mat-drawer
+    #drawer
+    opened
+    mode="side"
+    [style.width]="open ? '100px' : '350px'"
+    style="border: 0px;"
+  >
+    <mat-icon
+      [fontIcon]="open? 'arrow_right' : 'arrow_left'"
+      (click)="open = !open"
+      class="arrow_icon"
+    ></mat-icon>
+    <div class="header_container">
+      <img
+        [style]="open? 'width: 70px;' : 'width: 220px;'"
+        [src]="open? 'assets/Logo_Cut.png' : 'assets/Logo.png'"
+      />
+      <div class="routers_container">
+        <div [style]="open? 'width: auto' : ''" class="item active">
+          <mat-icon fontIcon="groups"></mat-icon>
+          <span *ngIf="!open">Clientes</span>
+        </div>
+        <div [style]="open? 'width: auto' : ''" class="item">
+          <mat-icon fontIcon="inventory"></mat-icon>
+          <span *ngIf="!open">Produtos</span>
+        </div>
+        <div [style]="open? 'width: auto' : ''" class="item">
+          <mat-icon fontIcon="payments"></mat-icon>
+          <span *ngIf="!open">Vendas</span>
+        </div>
+      </div>
+      <div [style]="open? 'width: auto' : ''" class="item active">
+        <mat-icon fontIcon="logout"></mat-icon>
+        <span *ngIf="!open">Sair</span>
+      </div>
+    </div>
+  </mat-drawer>
+  <router-outlet></router-outlet>
+</mat-drawer-container>
+
+<!-- <div class="header">
+    <mat-icon [fontIcon]="open? 'arrow_right' : 'arrow_left'" (click)="open = !open"></mat-icon>
+</div>
+
+<router-outlet></router-outlet> -->

@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+  /* Tamanho do título: grande em desktops, médio em tablets, menor em dispositivos móveis */
+  --title-font-size: clamp(2rem, 2vw, 2rem);
+
+  /* Subtítulo: um pouco menor que o título */
+  --subtitle-font-size: clamp(1.5rem, 1.75vw, 1.75rem);
+
+  /* Texto padrão: responsivo para leitura confortável */
+  --text-font-size: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+* {
+  font-size: var(--text-font-size);
+}
