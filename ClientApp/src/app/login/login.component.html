@@ -1,1 +1,26 @@
-<p>login works!</p>
+<div class="container">
+  <img src="assets/Logo.png" />
+  <div class="wrapper">
+    <span class="title">Login</span>
+    <div class="text">
+      <mat-icon fontIcon="mail"></mat-icon>
+      <span>Email</span>
+    </div>
+    <div class="input">
+      <input type="email" />
+    </div>
+    <div class="text">
+      <mat-icon fontIcon="lock"></mat-icon>
+      <span>Senha</span>
+    </div>
+    <div class="input">
+      <input [type]="!view? 'password' : 'text'" />
+      <mat-icon
+        class="visibility"
+        [fontIcon]="view? 'visibility_off' : 'visibility'"
+        (click)="view = !view"
+      ></mat-icon>
+    </div>
+    <button>Entrar</button>
+  </div>
+</div>

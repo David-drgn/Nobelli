@@ -17,26 +17,64 @@
         [src]="open? 'assets/Logo_Cut.png' : 'assets/Logo.png'"
       />
       <div class="routers_container">
-        <div [style]="open? 'width: auto' : ''" class="item active">
+        <div
+          [style]="open? 'width: auto' : ''"
+          class="item active"
+          [matTooltip]="open? 'Clientes': ''"
+        >
           <mat-icon fontIcon="groups"></mat-icon>
           <span *ngIf="!open">Clientes</span>
         </div>
-        <div [style]="open? 'width: auto' : ''" class="item">
+        <div
+          [style]="open? 'width: auto' : ''"
+          class="item"
+          [matTooltip]="open? 'Produtos': ''"
+        >
           <mat-icon fontIcon="inventory"></mat-icon>
           <span *ngIf="!open">Produtos</span>
         </div>
-        <div [style]="open? 'width: auto' : ''" class="item">
+        <div
+          [style]="open? 'width: auto' : ''"
+          class="item"
+          [matTooltip]="open? 'Vendas': ''"
+        >
           <mat-icon fontIcon="payments"></mat-icon>
           <span *ngIf="!open">Vendas</span>
         </div>
+        <div
+          [style]="open? 'width: auto' : ''"
+          class="item"
+          [matTooltip]="open? 'Excel': ''"
+        >
+          <mat-icon fontIcon="description"></mat-icon>
+          <span *ngIf="!open">Excel</span>
+        </div>
       </div>
-      <div [style]="open? 'width: auto' : ''" class="item active">
+      <div
+        [style]="open? 'width: auto' : ''"
+        class="item active"
+        [matTooltip]="open? 'Sair': ''"
+      >
         <mat-icon fontIcon="logout"></mat-icon>
         <span *ngIf="!open">Sair</span>
       </div>
     </div>
   </mat-drawer>
-  <router-outlet></router-outlet>
+  <mat-drawer-content
+    [style]="open? 'width: calc(100vw - 100px);' : 'width: calc(100vw - 350px);'"
+  >
+    <div class="header">
+      <div class="input">
+        <mat-icon fontIcon="search"></mat-icon>
+        <input
+          type="text"
+          placeholder="Pesquise por produtos, clientes e datas"
+        />
+      </div>
+      <mat-icon fontIcon="account_circle" class="account"></mat-icon>
+    </div>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
 </mat-drawer-container>
 
 <!-- <div class="header">

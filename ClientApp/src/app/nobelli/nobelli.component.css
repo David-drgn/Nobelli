@@ -83,7 +83,43 @@ div.item {
   align-items: center;
   color: #df9c73;
   cursor: pointer;
-  span{
+  span {
     font-size: var(--subtitle-font-size) !important;
+  }
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  height: 70px;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+
+  .input {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    margin: auto;
+    background-color: #efefef;
+    padding: 5px;
+    border-radius: 30px;
+    input {
+      border: 0px;
+      width: 100%;
+      background-color: transparent;
+    }
+  }
+
+  mat-icon {
+    color: #df9c73;
+    width: auto;
+    height: auto;
+  }
+
+  mat-icon.account{
+    font-size: 50px;
   }
 }

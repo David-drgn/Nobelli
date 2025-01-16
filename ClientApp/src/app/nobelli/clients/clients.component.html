@@ -1,1 +1,24 @@
-<p>clients works!</p>
+<div class="container">
+  <table class="table_container">
+    <thead class="header_table">
+      <tr>
+        <th>Nome</th>
+        <th>Última Compra</th>
+        <th>Total de Gastos</th>
+        <th>Histórico de Compras</th>
+      </tr>
+    </thead>
+    <tbody class="body_table">
+      <tr *ngFor="let item of list" (click)="clientSelect = item" [class]="item == clientSelect? 'selected' : ''">
+        <td>David Raphael</td>
+        <td>12/10/2025</td>
+        <td>R$120,00</td>
+        <td>{{item}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footer">
+    <mat-icon fontIcon="add" matTooltip="Adicionar cliente"></mat-icon>
+    <mat-icon fontIcon="remove" matTooltip="Remover cliente"></mat-icon>
+  </div>
+</div>

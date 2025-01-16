@@ -17,9 +17,30 @@ body {
   --subtitle-font-size: clamp(1.5rem, 1.75vw, 1.75rem);
 
   /* Texto padrão: responsivo para leitura confortável */
-  --text-font-size: clamp(1rem, 1.5vw, 1.5rem);
+  --text-font-size: clamp(1rem, 1.5vw, 1rem);
 }
 
 * {
   font-size: var(--text-font-size);
+  letter-spacing: 1px;
+}
+
+/* Barra de rolagem */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Trilha da barra */
+*::-webkit-scrollbar-track {
+  background: #fde5dd85;
+}
+
+/* Thumb (parte que você arrasta) */
+*::-webkit-scrollbar-thumb {
+  background: #df9c73;
+  border-radius: 10px;
+}
+
+input:focus-visible {
+  outline: none;
 }
