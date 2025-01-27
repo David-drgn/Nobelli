@@ -1,75 +1,48 @@
 <mat-drawer-container autosize>
-  <mat-drawer
-    #drawer
-    opened
-    mode="side"
-    [style.width]="open ? '100px' : '350px'"
-    style="border: 0px;"
-  >
-    <mat-icon
-      [fontIcon]="open? 'arrow_right' : 'arrow_left'"
-      (click)="open = !open"
-      class="arrow_icon"
-    ></mat-icon>
+  <mat-drawer #drawer opened mode="side" [style.width]="open ? '100px' : '350px'" style="border: 0px;">
+    <mat-icon [fontIcon]="open? 'arrow_right' : 'arrow_left'" (click)="open = !open" class="arrow_icon"></mat-icon>
     <div class="header_container">
-      <img
-        [style]="open? 'width: 70px;' : 'width: 220px;'"
-        [src]="open? 'assets/Logo_Cut.png' : 'assets/Logo.png'"
-      />
+      <img [style]="open? 'width: 70px;' : 'width: 220px;'" [src]="open? 'assets/Logo_Cut.png' : 'assets/Logo.png'" />
       <div class="routers_container">
-        <div
-          [style]="open? 'width: auto' : ''"
-          class="item active"
-          [matTooltip]="open? 'Clientes': ''"
-        >
+        <div routerLink="./" [style]="open? 'width: auto' : ''"
+          [class]="pathSelect == '/nobelli'? 'item active' : 'item'" [matTooltip]="open? 'Calendário': ''">
+          <mat-icon fontIcon="calendar_month"></mat-icon>
+          <span *ngIf="!open">Calendário</span>
+        </div>
+        <div routerLink="./clients" [style]="open? 'width: auto' : ''"
+          [class]="pathSelect == '/nobelli/clients'? 'item active' : 'item'" [matTooltip]="open? 'Clientes': ''">
           <mat-icon fontIcon="groups"></mat-icon>
           <span *ngIf="!open">Clientes</span>
         </div>
-        <div
-          [style]="open? 'width: auto' : ''"
-          class="item"
-          [matTooltip]="open? 'Produtos': ''"
-        >
+        <div routerLink="./products" [style]="open? 'width: auto' : ''"
+          [class]="pathSelect == '/nobelli/products'? 'item active' : 'item'" [matTooltip]="open? 'Produtos': ''">
           <mat-icon fontIcon="inventory"></mat-icon>
           <span *ngIf="!open">Produtos</span>
         </div>
-        <div
-          [style]="open? 'width: auto' : ''"
-          class="item"
-          [matTooltip]="open? 'Vendas': ''"
-        >
+        <div routerLink="./bands" [style]="open? 'width: auto' : ''"
+          [class]="pathSelect == '/nobelli/bands'? 'item active' : 'item'" [matTooltip]="open? 'Vendas': ''">
           <mat-icon fontIcon="payments"></mat-icon>
           <span *ngIf="!open">Vendas</span>
         </div>
-        <div
-          [style]="open? 'width: auto' : ''"
-          class="item"
-          [matTooltip]="open? 'Excel': ''"
-        >
+        <div routerLink="./docs" [style]="open? 'width: auto' : ''"
+          [class]="pathSelect == '/nobelli/docs'? 'item active' : 'item'" [matTooltip]="open? 'Excel': ''">
           <mat-icon fontIcon="description"></mat-icon>
           <span *ngIf="!open">Excel</span>
         </div>
       </div>
-      <div
-        [style]="open? 'width: auto' : ''"
-        class="item active"
-        [matTooltip]="open? 'Sair': ''"
-      >
+      <div [style]="open? 'width: auto' : ''" class="item active" [matTooltip]="open? 'Sair': ''">
         <mat-icon fontIcon="logout"></mat-icon>
         <span *ngIf="!open">Sair</span>
       </div>
     </div>
   </mat-drawer>
-  <mat-drawer-content
-    [style]="open? 'width: calc(100vw - 100px);' : 'width: calc(100vw - 350px);'"
-  >
+  <mat-drawer-content [style]="open? 'width: calc(100vw - 100px);' : 'width: calc(100vw - 350px);'">
     <div class="header">
       <div class="input">
         <mat-icon fontIcon="search"></mat-icon>
-        <input
-          type="text"
-          placeholder="Pesquise por produtos, clientes e datas"
-        />
+        <input type="text" placeholder="Pesquise por produtos, clientes e datas" #inputSearch
+          matTooltip="Caso queira pesquisar mais de uma coisa, coloque uma vírgula antes da próxima palavra"
+          (input)="search(inputSearch.value)" />
       </div>
       <mat-icon fontIcon="account_circle" class="account"></mat-icon>
     </div>
@@ -77,6 +50,7 @@
   </mat-drawer-content>
 </mat-drawer-container>
 
+<app-load *ngIf="load"></app-load>
 <!-- <div class="header">
     <mat-icon [fontIcon]="open? 'arrow_right' : 'arrow_left'" (click)="open = !open"></mat-icon>
 </div>

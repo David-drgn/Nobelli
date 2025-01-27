@@ -1,0 +1,43 @@
+Cliente:
+Nome
+Telefone 
+Genero
+Data de Nascimento
+Endereço
+Descrição
+
+
+Funcionário:
+Nome 
+Telefone
+Email
+
+
+Serviço:
+Seção 
+Titulo
+Descrição
+valor
+duração
+
+
+Produtos:
+Titulo
+Descrição
+Qtd
+Valor Custo
+Valor Venda
+
+
+Vendas:
+Data
+Cliente compra
+Valor total
+Funcionario
+Produtos Vendidos []
+
+
+Gastos:
+Valor
+Produto
+Qtd 

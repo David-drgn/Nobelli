@@ -1,0 +1,27 @@
+{
+  "name": "nobelli",
+  "version": "1.0.0",
+  "description": "Api Nobelli Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Nobelli"
+  },
+  "author": "David Raphael Gusatavo Neves",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.0",
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.7",
+    "exceljs": "^4.4.0",
+    "express": "^4.21.2",
+    "xlsx": "^0.18.5"
+  }
+}
