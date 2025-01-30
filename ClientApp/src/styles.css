@@ -107,9 +107,17 @@ input:focus-visible {
   border: 0px;
 }
 
-.fc-toolbar-chunk{
+.fc-toolbar-chunk {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+.title {
+  font-size: var(--subtitle-font-size);
+  color: #df9c73;
+  align-items: center;
+  font-weight: 400;
+  display: flex;
 }

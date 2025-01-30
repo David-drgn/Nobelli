@@ -40,9 +40,11 @@ app.get("/api/connect", async (req, res) => {
 
 //Getters
 
-app.get("/api/userGet", async (req, res) => {
+app.get("/api/clienteGet", async (req, res) => {
   try {
-    let { data, error } = await supabase.from("cliente").select("*");
+    let { data, error } = await supabase
+      .from("cliente")
+      .select("*, eventos(*), venda(*)");
 
     if (error) throw error;
 
@@ -58,6 +60,27 @@ app.get("/api/userGet", async (req, res) => {
     });
   }
 });
+
+app.get("/api/produtosGet", async (req, res) => {
+  try {
+    let { data, error } = await supabase.from("produto").select("*");
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
+// Starter
 
 app.listen(port, () => {
   console.log(`Aplicação rodando na porta: ${port}`);

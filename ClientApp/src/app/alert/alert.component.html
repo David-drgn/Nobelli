@@ -1,0 +1,6 @@
+<div class="wrapper_alert">
+    <span class="title">
+        <mat-icon *ngIf="data.status == 1" fontIcon="error"></mat-icon>
+        <mat-icon *ngIf="data.status == 2" fontIcon="warning"></mat-icon>{{data.title}}</span>
+    <span>{{data.message}}</span>
+</div>

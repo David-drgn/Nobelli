@@ -7,6 +7,8 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import { StorageServiceService } from 'src/app/services/storage/storage-service.service';
 import { debounceTime } from 'rxjs';
+import { AlertComponent } from 'src/app/alert/alert.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-calendar',
@@ -67,7 +69,10 @@ export class CalendarComponent {
     },
   };
 
-  constructor(private storage: StorageServiceService) {
+  constructor(
+    private storage: StorageServiceService,
+    private dialog: MatDialog
+  ) {
     this.storage.search.pipe(debounceTime(800)).subscribe((searchText) => {
       this.storage.load.next(true);
       setTimeout(() => {
@@ -120,5 +125,15 @@ export class CalendarComponent {
     }
     this.viewCalendar++;
     this.calendarObj.changeView(this.calendarView);
+  }
+
+  openDialog(title: string, message: string, status: number = 0): void {
+    const dialogRef = this.dialog.open(AlertComponent, {
+      data: {
+        title,
+        message,
+        status,
+      },
+    });
   }
 }

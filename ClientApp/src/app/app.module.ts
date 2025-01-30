@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -17,11 +18,16 @@ import { CalendarComponent } from './nobelli/calendar/calendar.component';
 import { ProductsComponent } from './nobelli/products/products.component';
 import { ExcelComponent } from './nobelli/excel/excel.component';
 import { BandsComponent } from './nobelli/bands/bands.component';
-
-import { FullCalendarModule } from '@fullcalendar/angular';
-
 import { HttpClientModule } from '@angular/common/http';
 import { LoadComponent } from './load/load.component';
+import { AlertComponent } from './alert/alert.component';
+import { ClientAlertComponent } from './client-alert/client-alert.component';
+
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { MatSelectModule } from '@angular/material/select';
+
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +39,8 @@ import { LoadComponent } from './load/load.component';
     ExcelComponent,
     BandsComponent,
     LoadComponent,
+    AlertComponent,
+    ClientAlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,10 +51,15 @@ import { LoadComponent } from './load/load.component';
     MatSidenavModule,
     BrowserAnimationsModule,
     MatIconModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    FormsModule,
+    MatSelectModule,
     MatTooltipModule,
     HttpClientModule,
+    ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [provideNgxMask()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
