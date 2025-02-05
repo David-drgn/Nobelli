@@ -94,12 +94,14 @@ export class ClientsComponent {
                   'Ocorreu um erro ao deletar o cliente, por favor tente novamente mais tarde',
                   2
                 );
-              else
+              else {
                 this.openDialog(
                   'Tudo certo',
                   'O cliente foi excluído com sucesso',
                   1
                 );
+                this.getClient();
+              }
             },
             (erro) => {
               this.storage.load.next(false);
