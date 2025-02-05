@@ -8,7 +8,7 @@ import { StorageServiceService } from '../storage/storage-service.service';
 export class HttpServiceService {
   urlBase: string = location.origin.includes('localhost')
     ? 'http://localhost:3000'
-    : '';
+    : 'https://nobelliapi.vercel.app';
 
   constructor(
     private httpClient: HttpClient,
