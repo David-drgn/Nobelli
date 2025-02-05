@@ -164,8 +164,7 @@ app.post("/api/clienteDelete", async (req, res) => {
 
     res.status(200).json({
       erro: false,
-      mensagem: "Conexão realizada com sucesso",
-      dados: data,
+      mensagem: "Conexão realizada com sucesso"
     });
   } catch (error) {
     res.status(500).json({
