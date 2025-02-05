@@ -1,0 +1,35 @@
+<div class="container">
+    <mat-vertical-stepper [linear]="false" #stepper animationDuration="1000">
+        <mat-step state="done">
+            <ng-template matStepLabel class="titleSection">Dados iniciais</ng-template>
+            <div class="item" matTooltip="Descrição do serviço">
+                <span>Titulo</span>
+                <span>30min</span>
+                <span>R$20,00</span>
+                <div class="options">
+                    <mat-icon fontIcon="delete" matTooltip="Deletar item"></mat-icon>
+                    <mat-icon fontIcon="edit" matTooltip="Editar item"></mat-icon>
+                </div>
+            </div>
+            <div class="options">
+                <mat-icon fontIcon="edit" matTooltip="Editar dados da seção"></mat-icon>
+                <mat-icon fontIcon="add" matTooltip="Adicionar um serviço"></mat-icon>
+                <mat-icon fontIcon="delete" matTooltip="Remover seção"></mat-icon>
+            </div>
+        </mat-step>
+        <mat-step state="done">
+            <ng-template matStepLabel>Dados iniciais</ng-template>
+            <span>Teste 1</span>
+        </mat-step>
+
+        <ng-template matStepperIcon="done">
+            <mat-icon>radio_button_unchecked</mat-icon>
+        </ng-template>
+
+        <ng-template matStepperIcon="edit">
+            <mat-icon>radio_button_unchecked</mat-icon>
+        </ng-template>
+    </mat-vertical-stepper>
+
+    <mat-icon class="addButton" fontIcon="add" matTooltip="Adicionar nova seção aos serviços" [routerLink]="['../crud', 'section@service', 0]"></mat-icon>
+</div>

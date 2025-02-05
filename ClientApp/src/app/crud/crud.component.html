@@ -1,0 +1,209 @@
+<div class="wrapper_alert" *ngIf="type == 'client'">
+    <div class="container_crud">
+        <span class="title">Adicione os dados do cliente</span>
+        <div class="container">
+            <mat-stepper [linear]="false" #stepper animationDuration="1000">
+                <mat-step>
+                    <ng-template matStepLabel>Dados iniciais</ng-template>
+                    <div class="wrapper_input">
+                        <span>
+                            Nome do Cliente
+                            <mat-icon fontIcon="person"></mat-icon>
+                        </span>
+                        <input type="text" placeholder="Nome" [(ngModel)]="client.nome">
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Telefone
+                            <mat-icon fontIcon="call"></mat-icon>
+                        </span>
+                        <input type="text" mask="(00) 00000-0000" placeholder="Telefone" [(ngModel)]="client.telefone">
+                    </div>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Data de nascimento
+                                <mat-icon fontIcon="calendar_month"></mat-icon>
+                            </span>
+                            <input type="date" placeholder="Data de nascimento" [(ngModel)]="client.dataNasc">
+                        </div>
+                        <div class="wrapper_input">
+                            <span>Gênero<mat-icon fontIcon="person"></mat-icon></span>
+                            <select [(ngModel)]="client.genero">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>CEP<mat-icon fontIcon="location_on"></mat-icon>
+                        </span>
+                        <input type="text" [(ngModel)]="client.cep" mask="00000-000" placeholder="CEP"
+                            (input)="cepChange(cep.value)" #cep>
+                    </div>
+                    <div class="two_camps">
+                        <div class="wrapper_input" matTooltip="Este compo é preenchido quando você seleciona o CEP">
+                            <span>Logradouro<mat-icon fontIcon="lock"></mat-icon>
+                            </span>
+                            <input type="text" placeholder="Logradouro" disabled [(ngModel)]="client.logradouro">
+                        </div>
+                        <div class="wrapper_input" matTooltip="Este compo é preenchido quando você seleciona o CEP">
+                            <span>UF<mat-icon fontIcon="lock"></mat-icon></span>
+                            <input type="text" placeholder="UF" disabled [(ngModel)]="client.uf">
+                        </div>
+                    </div>
+                    <div class="wrapper_input" matTooltip="Este compo é preenchido quando você seleciona o CEP">
+                        <span>Bairro<mat-icon fontIcon="lock"></mat-icon>
+                        </span>
+                        <input type="text" placeholder="Bairro" disabled [(ngModel)]="client.bairro">
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Descrição</ng-template>
+                    <div class="section" *ngFor="let section of sections; let i = index">
+                        <div class="wrapper_input section_title">
+                            <input type="text" placeholder="Digite o nome da seção" [(ngModel)]="section.title" #title>
+                        </div>
+                        <div class="section_item" *ngFor="let valueSection of section.valores; let j = index">
+                            <div class="wrapper_input">
+                                <input type="text" placeholder="Item da seção"
+                                    (change)="sections[i].valores[j] =  newValue.value" #newValue
+                                    [value]="valueSection">
+                            </div>
+                            <mat-icon fontIcon="remove" matTooltip="Remover linha" (click)="removeRow(i, j)"></mat-icon>
+                        </div>
+                        <div class="section_item">
+                            <mat-icon fontIcon="add" (click)="addRow(i)" matTooltip="Adicionar linha"></mat-icon>
+                            <mat-icon fontIcon="remove" (click)="removeSection(i)"
+                                matTooltip="Remover seção"></mat-icon>
+                        </div>
+                    </div>
+                    <button (click)="addSection()" class="section_button">Nova seção</button>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Concluir</ng-template>
+                    <div class="wrapper_input">
+                        <span>
+                            Nome do Cliente
+                            <mat-icon fontIcon="person"></mat-icon>
+                        </span>
+                        <input type="text" placeholder="Nome" [(ngModel)]="client.nome" disabled>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Telefone
+                            <mat-icon fontIcon="call"></mat-icon>
+                        </span>
+                        <input type="text" mask="(00) 00000-0000" placeholder="Telefone" [(ngModel)]="client.telefone"
+                            disabled>
+                    </div>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Data de nascimento
+                                <mat-icon fontIcon="calendar_month"></mat-icon>
+                            </span>
+                            <input type="date" placeholder="Data de nascimento" [(ngModel)]="client.dataNasc" disabled>
+                        </div>
+                        <div class="wrapper_input">
+                            <span>Gênero<mat-icon fontIcon="person"></mat-icon></span>
+                            <select [(ngModel)]="client.genero" disabled>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>CEP<mat-icon fontIcon="location_on"></mat-icon>
+                        </span>
+                        <input type="text" [(ngModel)]="client.cep" mask="00000-000" placeholder="CEP" disabled>
+                    </div>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>Logradouro<mat-icon fontIcon="lock"></mat-icon>
+                            </span>
+                            <input type="text" placeholder="Logradouro" disabled [(ngModel)]="client.logradouro">
+                        </div>
+                        <div class="wrapper_input">
+                            <span>UF<mat-icon fontIcon="lock"></mat-icon></span>
+                            <input type="text" placeholder="UF" disabled [(ngModel)]="client.uf">
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>Bairro<mat-icon fontIcon="lock"></mat-icon>
+                        </span>
+                        <input type="text" placeholder="Bairro" disabled [(ngModel)]="client.bairro">
+                    </div>
+                    <div class="section" *ngFor="let section of sections; let i = index">
+                        <div class="wrapper_input section_title">
+                            <input type="text" placeholder="Digite o nome da seção"
+                                (input)="section.title = title.value" disabled #title>
+                        </div>
+                        <div class="section_item" *ngFor="let valueSection of section.valores; let j = index">
+                            <div class="wrapper_input">
+                                <input type="text" placeholder="Item da seção"
+                                    (change)="sections[i].valores[j] =  newValue.value" #newValue [value]="valueSection"
+                                    disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <button (click)="clientCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
+                </mat-step>
+
+                <ng-template matStepperIcon="done">
+                    <mat-icon>radio_button_unchecked</mat-icon>
+                </ng-template>
+
+                <ng-template matStepperIcon="edit">
+                    <mat-icon>radio_button_unchecked</mat-icon>
+                </ng-template>
+
+            </mat-stepper>
+        </div>
+    </div>
+    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
+</div>
+
+<div class="wrapper_alert" *ngIf="type?.includes('section')">
+    <div class="container_crud">
+        <span class="title">Adicione os dados da seção</span>
+        <div class="container">
+            <div class="wrapper_input">
+                <span>
+                    Título
+                    <mat-icon fontIcon="person"></mat-icon>
+                </span>
+                <input type="text" placeholder="Nome">
+            </div>
+            <!-- <div class="two_camps">
+                <div class="wrapper_input">
+                    <span>
+                        Valor de custo
+                        <mat-icon fontIcon="call"></mat-icon>
+                    </span>
+                    <input type="text" mask="(00) 00000-0000" placeholder="Telefone">
+                </div>
+                <div class="wrapper_input">
+                    <span>
+                        Valor de venda
+                        <mat-icon fontIcon="call"></mat-icon>
+                    </span>
+                    <input type="text" mask="(00) 00000-0000" placeholder="Telefone">
+                </div>
+            </div> -->
+            <div class="wrapper_input">
+                <span>Descrição<mat-icon fontIcon="location_on"></mat-icon>
+                </span>
+                <textarea></textarea>
+            </div>
+            <div class="wrapper_input">
+                <span>Seção para:<mat-icon fontIcon="location_on"></mat-icon>
+                </span>
+                <input type="text" placeholder="Tipo da seção" disabled>
+            </div>
+        </div>
+    </div>
+    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
+</div>

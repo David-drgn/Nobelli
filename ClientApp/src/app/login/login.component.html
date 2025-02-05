@@ -7,20 +7,22 @@
       <span>Email</span>
     </div>
     <div class="input">
-      <input type="email" />
+      <input type="email" [(ngModel)]="email" />
     </div>
     <div class="text">
       <mat-icon fontIcon="lock"></mat-icon>
       <span>Senha</span>
     </div>
     <div class="input">
-      <input [type]="!view? 'password' : 'text'" />
-      <mat-icon
-        class="visibility"
-        [fontIcon]="view? 'visibility_off' : 'visibility'"
-        (click)="view = !view"
-      ></mat-icon>
+      <input [type]="!view? 'password' : 'text'" [(ngModel)]="password" />
+      <mat-icon class="visibility" [fontIcon]="view? 'visibility_off' : 'visibility'" (click)="view = !view"></mat-icon>
     </div>
-    <button routerLink="/nobelli">Entrar</button>
+    <div class="input check">
+      <input type="checkbox" [(ngModel)]="check">
+      <span>Deseja manter o login no dispositivo?</span>
+    </div>
+    <button (click)="login()">Entrar</button>
   </div>
 </div>
+
+<app-load *ngIf="load"></app-load>

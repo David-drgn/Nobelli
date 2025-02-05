@@ -21,12 +21,17 @@ import { BandsComponent } from './nobelli/bands/bands.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadComponent } from './load/load.component';
 import { AlertComponent } from './alert/alert.component';
-import { ClientAlertComponent } from './client-alert/client-alert.component';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { CrudComponent } from './crud/crud.component';
+import { ServicesComponent } from './nobelli/services/services.component';
+
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,9 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     BandsComponent,
     LoadComponent,
     AlertComponent,
-    ClientAlertComponent,
+    CrudComponent,
+    ServicesComponent,
+    ConfirmationComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,9 +64,16 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     MatSelectModule,
     MatTooltipModule,
     HttpClientModule,
+    MatStepperModule,
     ReactiveFormsModule,
   ],
-  providers: [provideNgxMask()],
+  providers: [
+    provideNgxMask(),
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

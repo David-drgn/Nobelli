@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AlertComponent } from 'src/app/alert/alert.component';
-import { ClientAlertComponent } from 'src/app/client-alert/client-alert.component';
+import { ConfirmationComponent } from 'src/app/confirmation/confirmation.component';
 import { HttpServiceService } from 'src/app/services/http/http-service.service';
 import { StorageServiceService } from 'src/app/services/storage/storage-service.service';
 
@@ -11,7 +11,7 @@ import { StorageServiceService } from 'src/app/services/storage/storage-service.
   styleUrls: ['./clients.component.css'],
 })
 export class ClientsComponent {
-  list = Array.from({ length: 1000 }, (_, index) => index + 1);
+  list: any;
 
   clientSelect: number = 0;
 
@@ -24,17 +24,23 @@ export class ClientsComponent {
   }
 
   getClient() {
+    this.storage.load.next(true);
     this.http.GET('clienteGet').subscribe(
       (res: any) => {
+        this.storage.load.next(false);
+        console.log(res);
         if (res.erro)
           this.openDialog(
             'Ops!',
             'Não conseguimos carregar os clientes agora. Por favor, tente novamente em instantes.',
             1
           );
-        console.table(res);
+        else {
+          this.list = res.data;
+        }
       },
       (erro: any) => {
+        this.storage.load.next(false);
         this.openDialog(
           'Ops!',
           'Não conseguimos carregar os clientes agora. Por favor, tente novamente em instantes.',
@@ -55,11 +61,58 @@ export class ClientsComponent {
     });
   }
 
-  openRegister(id: string = ''): void {
-    const dialogRef = this.dialog.open(ClientAlertComponent, {
-      data: {
-        id,
-      },
-    });
+  lastDate(items: any) {
+    if (items.length == 0) {
+      return null;
+    }
+
+    let item = items.reduce((latest: any, current: any) =>
+      current.data > latest.data ? current : latest
+    );
+    return item.data;
+  }
+
+  deleteClient(item: any) {
+    this.dialog
+      .open(ConfirmationComponent, {
+        data: {
+          title: 'Certeza que desejas deletar o cliente?',
+          message: `Tem certeza mesmo que deseja excluir o cliente '${item.nome}' de seus clientes? Isto levará a exclusão de todos os dados referentes a ele`,
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((response) => {
+        if (response) {
+          this.storage.load.next(true);
+          this.http.POST('clienteDelete', { id: item.id }).subscribe(
+            (res) => {
+              this.storage.load.next(false);
+              if (res.erro)
+                this.openDialog(
+                  'Ops!',
+                  'Ocorreu um erro ao deletar o cliente, por favor tente novamente mais tarde',
+                  2
+                );
+              else
+                this.openDialog(
+                  'Tudo certo',
+                  'O cliente foi excluído com sucesso',
+                  1
+                );
+            },
+            (erro) => {
+              this.storage.load.next(false);
+              this.openDialog(
+                'Ops!',
+                'Ocorreu um erro ao deletar o cliente, por favor tente novamente mais tarde',
+                2
+              );
+
+              console.error(erro);
+            }
+          );
+        } else this.openDialog('Tudo certo', 'A operação foi cancelada', 1);
+      });
   }
 }

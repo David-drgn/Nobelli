@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { StorageServiceService } from '../services/storage/storage-service.service';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-nobelli',
@@ -12,21 +13,43 @@ export class NobelliComponent {
   pathSelect: string = '';
   load: boolean = false;
 
+  screenWidth: number = window.innerWidth;
+
+  @ViewChild('drawer') drawer!: MatDrawer;
+
   constructor(private router: Router, private storage: StorageServiceService) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.pathSelect = event.url;
-        console.log(this.pathSelect);
       }
     });
 
     this.storage.load.subscribe((loader) => {
-      console.log(loader);
       this.load = loader;
     });
   }
 
+  ngAfterViewInit() {
+    if (this.screenWidth > 600) {
+      this.drawer.open();
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.screenWidth = window.innerWidth;
+    if (this.screenWidth > 600) {
+      this.drawer.open();
+    } else {
+      this.drawer.close();
+    }
+  }
+
   search(text: string) {
     this.storage.search.next(text);
+  }
+
+  toggleDrawer() {
+    if (this.screenWidth <= 600) this.drawer.toggle();
   }
 }

@@ -1,0 +1,130 @@
+.wrapper_alert {
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: auto;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.container_crud {
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper_input {
+  width: 100%;
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  justify-content: center;
+  input {
+    height: 34px;
+    width: -webkit-fill-available;
+    border-radius: 10px;
+    border-color: transparent;
+    background-color: #efefef;
+    padding-left: 10px;
+  }
+  span {
+    width: 100%;
+    color: #df9c73;
+    display: flex;
+    align-items: center;
+  }
+  select {
+    appearance: none; /* Remove a aparência padrão do sistema */
+    background-color: #f3f3f3; /* Cor de fundo semelhante ao input */
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    color: #777;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+.two_camps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  width: -webkit-fill-available;
+}
+
+.section {
+  border-left: #df9c73 5px solid;
+  border-radius: 5px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  mat-icon {
+    padding: 5px;
+    border-radius: 100%;
+    background: #df9c73;
+    color: #fde5dd;
+    transition: all 1s;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+
+  mat-icon:hover {
+    padding: 7px;
+  }
+}
+
+.section_title {
+  input {
+    background-color: transparent !important;
+    border-bottom: 2px #df9c73 solid;
+    border-radius: 0px;
+    color: #df9c73;
+    font-size: var(--subtitle-font-size);
+  }
+}
+
+.section_item {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.excel_button {
+  padding: 10px;
+  font-size: 30px;
+  border-radius: 100%;
+  background: #df9d739e;
+  color: #fde5dd;
+  transition: all 1s;
+  cursor: pointer;
+  margin-left: 5px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+.excel_button:hover {
+  background: #df9c73;
+  padding: 7px;
+}

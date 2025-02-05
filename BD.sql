@@ -19,7 +19,8 @@ create table cliente(
     genero genero NOT NULL DEFAULT "Outro",
     endereco TEXT,
     descricao TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_nasc DATE
 );
 
 create table funcionario(
@@ -74,6 +75,7 @@ create table venda(
     funcionario_id UUID NOT NULL,
     valorTotal DECIMAL(10, 2) NOT NULL,
     produtos JSON NOT NULL,
+    data DATE NOT NULL,
     CONSTRAINT fk_venda_cliente FOREIGN KEY (cliente_id) REFERENCES cliente(id),
     CONSTRAINT fk_venda_funcionario FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
 );

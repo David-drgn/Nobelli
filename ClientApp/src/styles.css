@@ -10,14 +10,21 @@ body {
 }
 
 :root {
-  /* Tamanho do título: grande em desktops, médio em tablets, menor em dispositivos móveis */
   --title-font-size: clamp(2rem, 2vw, 2rem);
 
-  /* Subtítulo: um pouco menor que o título */
   --subtitle-font-size: clamp(1.5rem, 1.75vw, 1.75rem);
 
-  /* Texto padrão: responsivo para leitura confortável */
   --text-font-size: clamp(1rem, 1.5vw, 1rem);
+}
+
+@media screen and (max-width: 600px) {
+  :root {
+    --title-font-size: clamp(1.5rem, 2vw, 2rem);
+
+    --subtitle-font-size: clamp(1.2rem, 1.75vw, 1.75rem);
+
+    --text-font-size: clamp(1rem, 1.5vw, 1rem);
+  }
 }
 
 * {
@@ -120,4 +127,27 @@ input:focus-visible {
   align-items: center;
   font-weight: 400;
   display: flex;
+}
+
+.mat-horizontal-stepper-header .mat-step-icon,
+.mat-vertical-stepper-header .mat-step-icon {
+  background-color: #df9c73;
+}
+
+button {
+  padding: 10px 50px;
+  border: 0px;
+  background-color: #df9c73;
+  color: #fde5dd;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 1s;
+}
+
+button:hover {
+  padding: 10px 70px;
+}
+
+.mat-stepper-vertical {
+  width: 100% !important;
 }

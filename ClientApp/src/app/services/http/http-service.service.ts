@@ -22,6 +22,10 @@ export class HttpServiceService {
 
   GET<T = any>(api: string, body: any = {}) {
     body.token = this.storage.token.getValue();
-    return this.httpClient.get<T>(`${this.urlBase}/api/${api}`, body);
+    return this.httpClient.get<T>(`${this.urlBase}/api/${api}/${body.token}`);
+  }
+
+  GETCEP<T = any>(cep: string) {
+    return this.httpClient.get<T>(`https://viacep.com.br/ws/${cep}/json/`);
   }
 }

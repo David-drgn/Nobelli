@@ -1,1 +1,25 @@
-<p>products works!</p>
+<mat-stepper [linear]="false" #stepper animationDuration="1000">
+    <mat-step label="Produtos a venda" state="shopping_cart">
+        <p>Conteúdo do primeiro step...</p>
+    </mat-step>
+
+    <mat-step label="Estoque" state="inventory">
+        <p>Conteúdo do estoque aqui...</p>
+    </mat-step>
+
+    <ng-template matStepperIcon="shopping_cart">
+        <mat-icon>shopping_cart</mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="inventory">
+        <mat-icon>inventory</mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="done">
+        <mat-icon>radio_button_unchecked</mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="edit">
+        <mat-icon>radio_button_unchecked</mat-icon>
+    </ng-template>
+</mat-stepper>
