@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { debounceTime } from 'rxjs';
 import { AlertComponent } from 'src/app/alert/alert.component';
 import { ConfirmationComponent } from 'src/app/confirmation/confirmation.component';
 import { HttpServiceService } from 'src/app/services/http/http-service.service';
@@ -20,8 +21,12 @@ export class ProductsComponent {
     private dialog: MatDialog
   ) {
     this.search = this.storage.search.getValue();
-    this.storage.search.subscribe((value) => {
-      this.search = value;
+    this.storage.search.pipe(debounceTime(800)).subscribe((searchText) => {
+      this.storage.load.next(true);
+      setTimeout(() => {
+        this.storage.load.next(false);
+        this.search = searchText;
+      }, 1000);
     });
     this.getProdutos();
   }
