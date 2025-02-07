@@ -32,6 +32,9 @@ import { ServicesComponent } from './nobelli/services/services.component';
 
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { MaskPipePipe } from './pipes/mask/mask-pipe.pipe';
+import { HighLigthPipe } from './pipes/highLight/high-ligth.pipe';
+import { CurrencyMaskPipe } from './pipes/currencyPipe/currency-mask.pipe';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,9 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
     CrudComponent,
     ServicesComponent,
     ConfirmationComponent,
+    MaskPipePipe,
+    HighLigthPipe,
+    CurrencyMaskPipe
   ],
   imports: [
     BrowserModule,

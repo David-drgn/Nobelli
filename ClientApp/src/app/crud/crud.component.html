@@ -166,7 +166,7 @@
     <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
 
-<div class="wrapper_alert" *ngIf="type?.includes('section')">
+<div class="wrapper_alert" *ngIf="type == 'section'">
     <div class="container_crud">
         <span class="title">Adicione os dados da seção</span>
         <div class="container">
@@ -175,34 +175,112 @@
                     Título
                     <mat-icon fontIcon="person"></mat-icon>
                 </span>
-                <input type="text" placeholder="Nome">
+                <input type="text" placeholder="Nome" [(ngModel)]="sectionCreate.title">
             </div>
-            <!-- <div class="two_camps">
+            <div class="wrapper_input">
+                <span>Descrição<mat-icon fontIcon="inbox_text"></mat-icon>
+                </span>
+                <textarea placeholder="Descrição básica da seção" [(ngModel)]="sectionCreate.descricao"></textarea>
+            </div>
+            <div class="wrapper_input">
+                <span>Seção para<mat-icon fontIcon="question_mark"></mat-icon>
+                </span>
+                <input type="text" placeholder="Tipo da seção" [(ngModel)]="sectionType" disabled>
+            </div>
+            <button (click)="sectionCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
+        </div>
+    </div>
+    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
+</div>
+
+<div class="wrapper_alert" *ngIf="type == 'funcionario'">
+    <div class="container_crud">
+        <span class="title">Adicione os dados do funcionário</span>
+        <div class="container">
+            <div class="wrapper_input">
+                <span>
+                    Nome
+                    <mat-icon fontIcon="person"></mat-icon>
+                </span>
+                <input type="text" placeholder="Nome" [(ngModel)]="funcionario.nome">
+            </div>
+            <div class="two_camps">
+                <div class="wrapper_input">
+                    <span>
+                        Telefone
+                        <mat-icon fontIcon="call"></mat-icon>
+                    </span>
+                    <input type="text" mask="(00) 00000-0000" placeholder="Telefone" [(ngModel)]="funcionario.telefone">
+                </div>
+                <div class="wrapper_input">
+                    <span>
+                        Email
+                        <mat-icon fontIcon="mail"></mat-icon>
+                    </span>
+                    <input type="email" placeholder="Email" [(ngModel)]="funcionario.email">
+                </div>
+            </div>
+            <button (click)="funcionarioCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
+        </div>
+    </div>
+    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
+</div>
+
+<div class="wrapper_alert" *ngIf="type == 'product'">
+    <div class="container_crud">
+        <span class="title">Adicione os dados do produto</span>
+        <div class="container">
+            <div class="two_camps">
+
+                <div class="wrapper_input">
+                    <span>
+                        Nome
+                        <mat-icon fontIcon="person"></mat-icon>
+                    </span>
+                    <input type="text" placeholder="Nome" [(ngModel)]="produto.title">
+                </div>
+
+                <div class="wrapper_input">
+                    <span>
+                        Quantidade
+                        <mat-icon fontIcon="pin"></mat-icon>
+                    </span>
+                    <input type="number" min="0" placeholder="Quantidade" [(ngModel)]="produto.qtd">
+                </div>
+            </div>
+            <div class="two_camps">
                 <div class="wrapper_input">
                     <span>
                         Valor de custo
-                        <mat-icon fontIcon="call"></mat-icon>
+                        <mat-icon fontIcon="payments"></mat-icon>
                     </span>
-                    <input type="text" mask="(00) 00000-0000" placeholder="Telefone">
+                    <input type="number" step="0.01" min="0.01" max="1000" placeholder="Valor de custo"
+                        [(ngModel)]="produto.valorcusto">
                 </div>
                 <div class="wrapper_input">
                     <span>
                         Valor de venda
-                        <mat-icon fontIcon="call"></mat-icon>
+                        <mat-icon fontIcon="payments"></mat-icon>
                     </span>
-                    <input type="text" mask="(00) 00000-0000" placeholder="Telefone">
+                    <input type="number" step="0.01" min="0.01" max="1000" placeholder="Valor de venda"
+                        [(ngModel)]="produto.valorvenda">
                 </div>
-            </div> -->
-            <div class="wrapper_input">
-                <span>Descrição<mat-icon fontIcon="location_on"></mat-icon>
-                </span>
-                <textarea></textarea>
             </div>
             <div class="wrapper_input">
-                <span>Seção para:<mat-icon fontIcon="location_on"></mat-icon>
+                <span>
+                    Descrição
+                    <mat-icon fontIcon="inbox_text"></mat-icon>
                 </span>
-                <input type="text" placeholder="Tipo da seção" disabled>
+                <textarea [(ngModel)]="produto.descricao"></textarea>
             </div>
+            <div class="wrapper_input">
+                <span>
+                    Seção do produto
+                    <mat-icon fontIcon="inbox_text"></mat-icon>
+                </span>
+                <input type="text" [(ngModel)]="sectionCreate.title" disabled>
+            </div>
+            <button (click)="produtoCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
         </div>
     </div>
     <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>

@@ -1,12 +1,10 @@
 .container {
-  width: 90%;
-  height: calc(100% - 70px - 50px - 50px);
+  width: 100%;
+  height: calc(100% - 70px);
   display: flex;
   flex-direction: column;
   margin: auto;
-  margin-top: 50px;
   box-sizing: border-box;
-  align-items: center;
   overflow: auto;
 }
 
@@ -53,6 +51,10 @@
     td {
       padding-left: 20px;
       border-left: 2px solid #df9c73;
+    }
+    td.optionTd {
+      padding: 0px;
+      text-align: center;
     }
     :first-child {
       border: 0px solid;

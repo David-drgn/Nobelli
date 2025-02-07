@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpServiceService } from '../services/http/http-service.service';
 import { StorageServiceService } from '../services/storage/storage-service.service';
@@ -22,6 +21,25 @@ interface Client {
   dataNasc: string;
 }
 
+interface Funcionario {
+  nome: string;
+  telefone: string;
+  email: string;
+}
+
+interface SectionType {
+  title: string;
+  descricao: string;
+}
+
+interface Produto {
+  title: string;
+  descricao: string;
+  valorcusto: string;
+  valorvenda: string;
+  qtd: number;
+}
+
 @Component({
   selector: 'app-crud',
   templateUrl: './crud.component.html',
@@ -41,19 +59,66 @@ export class CrudComponent {
     dataNasc: '',
   };
 
+  funcionario: Funcionario = {
+    nome: '',
+    telefone: '',
+    email: '',
+  };
+
+  sectionCreate: SectionType = {
+    title: '',
+    descricao: '',
+  };
+
+  produto: Produto = {
+    title: '',
+    descricao: '',
+    valorcusto: '',
+    valorvenda: '',
+    qtd: 0,
+  };
+
   type: string | null;
+  sectionType: string | null = null;
+  sectionId: string | null = null;
   id: string | null;
 
   constructor(
     private route: ActivatedRoute,
     private http: HttpServiceService,
     private storage: StorageServiceService,
-    private dialog: MatDialog,
-    private router: Router
+    private dialog: MatDialog
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
-    if (this.id != '0') this.getClient();
+    if (this.type?.includes('section')) {
+      this.sectionType = this.type.split('@')[1];
+      this.type = this.type.split('@')[0];
+    }
+    if (this.type?.includes('product')) {
+      this.sectionId = this.type.split('@')[1];
+      this.type = this.type.split('@')[0];
+      if (this.sectionId) this.getSection();
+    }
+    if (this.id != '0') {
+      switch (this.type) {
+        case 'client':
+          this.getClient();
+          break;
+        case 'funcionario':
+          this.getFuncionario();
+          break;
+        case 'section':
+          this.getSection();
+          break;
+        case 'product':
+          this.getProduct();
+          break;
+
+        default:
+          break;
+      }
+    }
   }
 
   addSection() {
@@ -179,6 +244,101 @@ export class CrudComponent {
     );
   }
 
+  getFuncionario() {
+    this.storage.load.next(true);
+    this.http.GET(`funcionarioGet/${this.id}`).subscribe(
+      (res: any) => {
+        this.storage.load.next(false);
+        if (res.erro)
+          this.openDialog(
+            'Ops!',
+            'Ocorreu um erro ao buscar o funcionário, por favor tente novamente mais tarde',
+            1
+          );
+        else {
+          this.funcionario = {
+            nome: res.data[0].nome,
+            telefone: res.data[0].telefone,
+            email: res.data[0].email,
+          };
+        }
+      },
+      (erro) => {
+        this.openDialog(
+          'Ops!',
+          'Ocorreu um erro ao buscar o funcionário, por favor tente novamente mais tarde',
+          1
+        );
+        this.storage.load.next(false);
+      }
+    );
+  }
+
+  getSection() {
+    this.storage.load.next(true);
+    this.http
+      .GET(`sectionGet/${this.type == 'product' ? this.sectionId : this.id}`)
+      .subscribe(
+        (res: any) => {
+          this.storage.load.next(false);
+          if (res.erro)
+            this.openDialog(
+              'Ops!',
+              'Ocorreu um erro ao buscar a seção, por favor tente novamente mais tarde',
+              1
+            );
+          else {
+            this.sectionCreate = {
+              title: res.data[0].title,
+              descricao: res.data[0].descricao,
+            };
+          }
+        },
+        (erro) => {
+          this.openDialog(
+            'Ops!',
+            'Ocorreu um erro ao buscar a seção, por favor tente novamente mais tarde',
+            1
+          );
+          this.storage.load.next(false);
+        }
+      );
+  }
+
+  getProduct() {
+    this.storage.load.next(true);
+    this.http.GET(`produtoGet/${this.id}`).subscribe(
+      (res: any) => {
+        this.storage.load.next(false);
+        if (res.erro)
+          this.openDialog(
+            'Ops!',
+            'Ocorreu um erro ao buscar o produto, por favor tente novamente mais tarde',
+            1
+          );
+        else {
+          this.produto = {
+            title: res.data[0].title,
+            valorcusto: res.data[0].valorcusto,
+            valorvenda: res.data[0].valorvenda,
+            descricao: res.data[0].descricao,
+            qtd: res.data[0].qtd,
+          };
+
+          this.sectionCreate.title = res.data[0].section.title;
+        }
+      },
+      (erro) => {
+        this.openDialog(
+          'Ops!',
+          'Ocorreu um erro ao buscar o produto, por favor tente novamente mais tarde',
+          1
+        );
+        this.storage.load.next(false);
+      }
+    );
+  }
+
   clientCrud() {
     if (!this.client.nome) {
       this.openDialog('Ops!', 'Por favor, preencha o nome do cliente', 2);
@@ -214,7 +374,7 @@ export class CrudComponent {
                 : 'Os dados do seu cliente foram atualizados com sucesso',
               2
             );
-            this.router.navigate(['/nobelli/clients']);
+            window.history.back();
           }
         },
         (erro) => {
@@ -225,6 +385,157 @@ export class CrudComponent {
             this.id == '0'
               ? 'Ocorreu um erro ao cadastrar o cliente, tente novamente mais tarde'
               : 'Ocorreu um erro ao atualizar os dados do cliente, tente novamente daqui a pouco',
+            1
+          );
+        }
+      );
+  }
+
+  funcionarioCrud() {
+    if (!this.funcionario.nome) {
+      this.openDialog('Ops!', 'Por favor, preencha o nome do funcionario', 2);
+      return;
+    }
+    this.storage.load.next(true);
+    this.http
+      .POST(this.id == '0' ? 'funcionarioInsert' : 'funcionarioUpdate', {
+        nome: this.funcionario.nome,
+        telefone: this.funcionario.telefone,
+        email: this.funcionario.email,
+        id: this.id,
+      })
+      .subscribe(
+        (res) => {
+          this.storage.load.next(false);
+          if (res.erro)
+            this.openDialog(
+              'Opss!',
+              this.id == '0'
+                ? 'Ocorreu um erro ao cadastrar o funcionário, tente novamente mais tarde'
+                : 'Ocorreu um erro ao atualizar os dados do funcionário, tente novamente daqui a pouco',
+              1
+            );
+          else {
+            this.openDialog(
+              'Sucesso!',
+              this.id == '0'
+                ? 'Seu funcionário foi cadastrado com sucesso'
+                : 'Os dados do seu funcionário foram atualizados com sucesso',
+              2
+            );
+            window.history.back();
+          }
+        },
+        (erro) => {
+          this.storage.load.next(false);
+          console.error(erro);
+          this.openDialog(
+            'Opss!',
+            this.id == '0'
+              ? 'Ocorreu um erro ao cadastrar o funcionário, tente novamente mais tarde'
+              : 'Ocorreu um erro ao atualizar os dados do funcionário, tente novamente daqui a pouco',
+            1
+          );
+        }
+      );
+  }
+
+  sectionCrud() {
+    if (!this.sectionCreate.title) {
+      this.openDialog('Ops!', 'Por favor, preencha o nome da seção', 2);
+      console.log(this.sectionCreate.descricao);
+      return;
+    }
+    this.storage.load.next(true);
+    this.http
+      .POST(this.id == '0' ? 'sectionInsert' : 'sectionUpdate', {
+        title: this.sectionCreate.title,
+        descricao: this.sectionCreate.descricao,
+        tipo: this.sectionType?.toLowerCase(),
+        id: this.id,
+      })
+      .subscribe(
+        (res) => {
+          this.storage.load.next(false);
+          if (res.erro)
+            this.openDialog(
+              'Opss!',
+              this.id == '0'
+                ? 'Ocorreu um erro ao cadastrar a seção, tente novamente mais tarde'
+                : 'Ocorreu um erro ao atualizar os dados da seção, tente novamente daqui a pouco',
+              1
+            );
+          else {
+            this.openDialog(
+              'Sucesso!',
+              this.id == '0'
+                ? 'Sua seção foi cadastrado com sucesso'
+                : 'Os dados do sua seção foram atualizados com sucesso',
+              2
+            );
+            window.history.back();
+          }
+        },
+        (erro) => {
+          this.storage.load.next(false);
+          console.error(erro);
+          this.openDialog(
+            'Opss!',
+            this.id == '0'
+              ? 'Ocorreu um erro ao cadastrar a seção, tente novamente mais tarde'
+              : 'Ocorreu um erro ao atualizar os dados da seção, tente novamente daqui a pouco',
+            1
+          );
+        }
+      );
+  }
+
+  produtoCrud() {
+    if (!this.produto.title) {
+      this.openDialog('Ops!', 'Por favor, preencha o nome do produto', 2);
+      return;
+    }
+    this.storage.load.next(true);
+    this.http
+      .POST(this.id == '0' ? 'produtoInsert' : 'produtoUpdate', {
+        title: this.produto.title,
+        descricao: this.produto.descricao,
+        section_id: this.sectionId,
+        valorcusto: this.produto.valorcusto,
+        valorvenda: this.produto.valorvenda,
+        qtd: this.produto.qtd,
+        id: this.id,
+      })
+      .subscribe(
+        (res) => {
+          this.storage.load.next(false);
+          if (res.erro)
+            this.openDialog(
+              'Opss!',
+              this.id == '0'
+                ? 'Ocorreu um erro ao cadastrar o produto, tente novamente mais tarde'
+                : 'Ocorreu um erro ao atualizar os dados do produto, tente novamente daqui a pouco',
+              1
+            );
+          else {
+            this.openDialog(
+              'Sucesso!',
+              this.id == '0'
+                ? 'Seu produto foi cadastrado com sucesso'
+                : 'Os dados do seu produto foram atualizados com sucesso',
+              2
+            );
+            window.history.back();
+          }
+        },
+        (erro) => {
+          this.storage.load.next(false);
+          console.error(erro);
+          this.openDialog(
+            'Opss!',
+            this.id == '0'
+              ? 'Ocorreu um erro ao cadastrar o produto, tente novamente mais tarde'
+              : 'Ocorreu um erro ao atualizar os dados do produto, tente novamente daqui a pouco',
             1
           );
         }

@@ -11,16 +11,24 @@ import { StorageServiceService } from 'src/app/services/storage/storage-service.
   styleUrls: ['./clients.component.css'],
 })
 export class ClientsComponent {
-  list: any;
+  listClient: any;
+  listFuncionario: any;
 
   clientSelect: number = 0;
+
+  search: string;
 
   constructor(
     private storage: StorageServiceService,
     private http: HttpServiceService,
     private dialog: MatDialog
   ) {
+    this.search = this.storage.search.getValue();
+    this.storage.search.subscribe((value) => {
+      this.search = value;
+    });
     this.getClient();
+    this.getFuncionario();
   }
 
   getClient() {
@@ -36,7 +44,7 @@ export class ClientsComponent {
             1
           );
         else {
-          this.list = res.data;
+          this.listClient = res.data;
         }
       },
       (erro: any) => {
@@ -44,6 +52,34 @@ export class ClientsComponent {
         this.openDialog(
           'Ops!',
           'Não conseguimos carregar os clientes agora. Por favor, tente novamente em instantes.',
+          1
+        );
+        console.error(erro);
+      }
+    );
+  }
+
+  getFuncionario() {
+    this.storage.load.next(true);
+    this.http.GET('funcionarioGet').subscribe(
+      (res: any) => {
+        this.storage.load.next(false);
+        console.log(res);
+        if (res.erro)
+          this.openDialog(
+            'Ops!',
+            'Não conseguimos carregar os funcionários agora. Por favor, tente novamente em instantes.',
+            1
+          );
+        else {
+          this.listFuncionario = res.data;
+        }
+      },
+      (erro: any) => {
+        this.storage.load.next(false);
+        this.openDialog(
+          'Ops!',
+          'Não conseguimos carregar os funcionários agora. Por favor, tente novamente em instantes.',
           1
         );
         console.error(erro);
@@ -63,7 +99,7 @@ export class ClientsComponent {
 
   lastDate(items: any) {
     if (items.length == 0) {
-      return null;
+      return '0/00/0000';
     }
 
     let item = items.reduce((latest: any, current: any) =>
@@ -116,5 +152,81 @@ export class ClientsComponent {
           );
         } else this.openDialog('Tudo certo', 'A operação foi cancelada', 1);
       });
+  }
+
+  deleteFuncionario(item: any) {
+    this.dialog
+      .open(ConfirmationComponent, {
+        data: {
+          title: 'Certeza que desejas deletar o funcionário?',
+          message: `Tem certeza mesmo que deseja excluir o funcionário '${item.nome}' de seus funcionários? Isto levará a exclusão de todos os dados referentes a ele`,
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((response) => {
+        if (response) {
+          this.storage.load.next(true);
+          this.http.POST('funcionarioDelete', { id: item.id }).subscribe(
+            (res) => {
+              this.storage.load.next(false);
+              if (res.erro)
+                this.openDialog(
+                  'Ops!',
+                  'Ocorreu um erro ao deletar o funcionário, por favor tente novamente mais tarde',
+                  2
+                );
+              else {
+                this.openDialog(
+                  'Tudo certo',
+                  'O funcionário foi excluído com sucesso',
+                  1
+                );
+                this.getClient();
+                this.getFuncionario();
+              }
+            },
+            (erro) => {
+              this.storage.load.next(false);
+              this.openDialog(
+                'Ops!',
+                'Ocorreu um erro ao deletar o funcionário, por favor tente novamente mais tarde',
+                2
+              );
+
+              console.error(erro);
+            }
+          );
+        } else this.openDialog('Tudo certo', 'A operação foi cancelada', 1);
+      });
+  }
+
+  clientFilter(clients: any): any[] {
+    if (this.search)
+      return clients.filter(
+        (e: any) =>
+          (e.nome?.toLowerCase().includes(this.search.toLowerCase()) ||
+            e.data_nasc?.toLowerCase().includes(this.search.toLowerCase()) ||
+            this.lastDate(e.venda)
+              ?.toLowerCase()
+              .includes(this.search.toLowerCase())) ??
+          false
+      );
+    else return clients;
+  }
+
+  funcionarioFilter(funcionarios: any): any[] {
+    if (this.search)
+      return funcionarios.filter(
+        (e: any) =>
+          (e.nome?.toLowerCase().includes(this.search.toLowerCase()) ||
+            e.telefone?.toLowerCase().includes(this.search.toLowerCase()) ||
+            e.email?.toLowerCase().includes(this.search.toLowerCase()) ||
+            this.lastDate(e.venda)
+              ?.toLowerCase()
+              .includes(this.search.toLowerCase())) ??
+          false
+      );
+    else return funcionarios;
   }
 }
