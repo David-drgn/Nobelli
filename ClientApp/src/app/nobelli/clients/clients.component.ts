@@ -25,7 +25,7 @@ export class ClientsComponent {
     private dialog: MatDialog
   ) {
     this.search = this.storage.search.getValue();
-    this.storage.search.pipe(debounceTime(800)).subscribe((searchText) => {
+    this.storage.search.subscribe((searchText) => {
       this.storage.load.next(true);
       setTimeout(() => {
         this.storage.load.next(false);

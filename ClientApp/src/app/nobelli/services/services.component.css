@@ -1,52 +1,85 @@
-.container {
+.table_container {
   width: 100%;
-  height: calc(100% - 70px);
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  align-items: center;
-  overflow: auto;
-}
-
-.addButton {
-  display: flex;
-  align-items: center;
-  border: 0px;
-  padding: 10px;
-  background-color: #df9d738c;
-  color: #fde5dd;
-  font-weight: 600;
-  border-radius: 100%;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  cursor: pointer;
-  &:hover {
-    background-color: #df9c73;
+  max-height: 90%;
+  border-collapse: collapse;
+  .header_table {
+    background-color: #fde5dd;
+    color: #df9c73;
+    padding: 5px 20px;
+    position: sticky;
+    top: 0;
+    th {
+      position: sticky;
+      top: 0;
+      padding: 10px 20px;
+      text-align: start;
+      border-left: 2px solid #df9c73;
+    }
+    :first-child {
+      border: 0px solid;
+    }
   }
-}
+  .body_table {
+    tr:nth-child(odd) {
+      background-color: #efefef; /* Cor clara */
+    }
 
-.item {
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  border-radius: 20px;
-  padding: 20px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  .options {
-    mat-icon {
-      background-color: #df9c73;
+    /* Linhas pares */
+    tr:nth-child(even) {
+      background-color: transparent; /* Cor mais escura */
+    }
+    tr {
+      padding: 10px 20px;
+      height: 45px;
+      cursor: pointer;
+    }
+    tr.selected {
+      background-color: #fde5dd;
+      color: #df9c73;
+      font-weight: 600;
+    }
+    td {
+      padding-left: 20px;
+      border-left: 2px solid #df9c73;
+    }
+    td.optionTd {
+      padding: 0px;
+      text-align: center;
+    }
+    :first-child {
+      border: 0px solid;
     }
   }
 }
 
-.item:hover {
-  color: white;
-  background-color: #df9c73;
+.footer {
+  position: fixed;
+  bottom: 15px;
+  display: flex;
+  width: 100%;
+  right: 15px;
+  justify-content: end;
+  gap: 20px;
+
+  mat-icon {
+    display: flex;
+    align-items: center;
+    border: 0px;
+    padding: 10px;
+    background-color: #df9d738c;
+    color: #fde5dd;
+    font-weight: 600;
+    border-radius: 100%;
+    cursor: pointer;
+    &:hover {
+      background-color: #df9d73;
+    }
+  }
+}
+
+mat-icon {
+  color: #df9c73;
+  cursor: pointer;
 }
 
 .options {
@@ -54,6 +87,7 @@
   flex-direction: row;
   justify-content: end;
   gap: 20px;
+  margin-bottom: 20px;
   mat-icon {
     display: flex;
     align-items: center;
