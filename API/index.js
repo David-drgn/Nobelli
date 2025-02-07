@@ -336,12 +336,6 @@ app.post("/api/sectionDelete", async (req, res) => {
       .eq("section_id", id);
     if (servicoError) throw servicoError;
 
-    const { error: estoqueError } = await supabase
-      .from("estoque")
-      .delete()
-      .eq("section_id", id);
-    if (estoqueError) throw estoqueError;
-
     const { error: sectionError } = await supabase
       .from("section")
       .delete()
@@ -641,7 +635,7 @@ app.get("/api/sectionGet/:token", async (req, res) => {
 
     let { data, error } = await supabase
       .from("section")
-      .select("*, produto(*), servico(*), estoque(*)");
+      .select("*, produto(*), servico(*)");
 
     if (error) throw error;
 
