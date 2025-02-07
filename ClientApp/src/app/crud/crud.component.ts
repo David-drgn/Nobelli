@@ -95,7 +95,7 @@ export class CrudComponent {
       this.sectionType = this.type.split('@')[1];
       this.type = this.type.split('@')[0];
     }
-    if (this.type?.includes('product')) {
+    if (this.type?.includes('product') || this.type?.includes('estoque')) {
       this.sectionId = this.type.split('@')[1];
       this.type = this.type.split('@')[0];
       if (this.sectionId) this.getSection();
@@ -112,6 +112,9 @@ export class CrudComponent {
           this.getSection();
           break;
         case 'product':
+          this.getProduct();
+          break;
+        case 'estoque':
           this.getProduct();
           break;
 
@@ -277,7 +280,13 @@ export class CrudComponent {
   getSection() {
     this.storage.load.next(true);
     this.http
-      .GET(`sectionGet/${this.type == 'product' ? this.sectionId : this.id}`)
+      .GET(
+        `sectionGet/${
+          this.type == 'product' || this.type == 'estoque'
+            ? this.sectionId
+            : this.id
+        }`
+      )
       .subscribe(
         (res: any) => {
           this.storage.load.next(false);

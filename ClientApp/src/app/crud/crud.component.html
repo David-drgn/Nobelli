@@ -226,9 +226,9 @@
     <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
 
-<div class="wrapper_alert" *ngIf="type == 'product'">
+<div class="wrapper_alert" *ngIf="type == 'product' || type == 'estoque'">
     <div class="container_crud">
-        <span class="title">Adicione os dados do produto</span>
+        <span class="title">Adicione os dados do {{type == 'product'? 'produto' : 'estoque'}}</span>
         <div class="container">
             <div class="two_camps">
 

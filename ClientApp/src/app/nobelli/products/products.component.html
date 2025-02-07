@@ -57,7 +57,7 @@
                     <mat-icon fontIcon="edit" [routerLink]="['../crud', 'section@Estoque', item.id]"
                         matTooltip="Editar dados da seção"></mat-icon>
                     <mat-icon fontIcon="add" matTooltip="Adicionar um produto a seção"
-                        [routerLink]="['../crud', returnProdItem(item), 0]"></mat-icon>
+                        [routerLink]="['../crud', returnEstoqueItem(item), 0]"></mat-icon>
                     <mat-icon fontIcon="delete" (click)="deleteSection(item)"
                         matTooltip="Remover seção de produtos"></mat-icon>
                 </div>
@@ -72,7 +72,7 @@
                         </tr>
                     </thead>
                     <tbody class="body_table">
-                        <tr *ngFor="let itemProduto of estoqueItemFilter(item.estoque)">
+                        <tr *ngFor="let itemProduto of estoqueItemFilter(item.produto)">
                             <td [innerHTML]="itemProduto.title | highLigth:search"></td>
                             <td [innerHTML]="(itemProduto.valorcusto | currencyMask:2) | highLigth:search"></td>
                             <td [innerHTML]="itemProduto.qtd | highLigth:search"></td>

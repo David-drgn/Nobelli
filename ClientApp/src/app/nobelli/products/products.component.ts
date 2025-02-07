@@ -64,6 +64,10 @@ export class ProductsComponent {
     return `product@${item.id}`;
   }
 
+  returnEstoqueItem(item: any): string {
+    return `estoque@${item.id}`;
+  }
+
   openDialog(title: string, message: string, status: number = 0): void {
     const dialogRef = this.dialog.open(AlertComponent, {
       data: {
