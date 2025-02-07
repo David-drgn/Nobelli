@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody class="body_table">
-                <tr *ngFor="let itemservico of servicoItemFilter(item.servico)">
+                <tr *ngFor="let itemservico of servicoItemFilter(item.servico)" [matTooltip]="itemservico.descricao">
                     <td [innerHTML]="itemservico.title | highLigth:search"></td>
                     <td [innerHTML]="itemservico.duracao | highLigth:search"></td>
                     <td [innerHTML]="(itemservico.valor | currencyMask:2) | highLigth:search"></td>

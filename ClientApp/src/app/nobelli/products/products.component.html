@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody class="body_table">
-                        <tr *ngFor="let itemProduto of produtosItemFilter(item.produto)">
+                        <tr *ngFor="let itemProduto of produtosItemFilter(item.produto)" [matTooltip]="itemProduto.descricao">
                             <td [innerHTML]="itemProduto.title | highLigth:search"></td>
                             <td [innerHTML]="(itemProduto.valorcusto | currencyMask:2) | highLigth:search"></td>
                             <td [innerHTML]="(itemProduto.valorvenda | currencyMask:2) | highLigth:search"></td>
@@ -72,7 +72,7 @@
                         </tr>
                     </thead>
                     <tbody class="body_table">
-                        <tr *ngFor="let itemProduto of estoqueItemFilter(item.produto)">
+                        <tr *ngFor="let itemProduto of estoqueItemFilter(item.produto)" [matTooltip]="itemProduto.descricao">
                             <td [innerHTML]="itemProduto.title | highLigth:search"></td>
                             <td [innerHTML]="(itemProduto.valorcusto | currencyMask:2) | highLigth:search"></td>
                             <td [innerHTML]="itemProduto.qtd | highLigth:search"></td>
