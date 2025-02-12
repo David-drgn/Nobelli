@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertComponent } from 'src/app/alert/alert.component';
 import { HttpServiceService } from 'src/app/services/http/http-service.service';
 import { StorageServiceService } from 'src/app/services/storage/storage-service.service';
 
@@ -136,7 +138,8 @@ export class ExcelComponent {
 
   constructor(
     private http: HttpServiceService,
-    private storage: StorageServiceService
+    private storage: StorageServiceService,
+    private dialog: MatDialog
   ) {}
 
   createExcel(only: string = '') {
@@ -158,6 +161,11 @@ export class ExcelComponent {
       )
       .subscribe(
         (res: Blob) => {
+          this.openDialog(
+            'Documento feito',
+            'A instalação será realizada automáticamente'
+          );
+
           this.storage.load.next(false);
           const blob = new Blob([res], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -176,8 +184,21 @@ export class ExcelComponent {
         },
         (erro) => {
           this.storage.load.next(false);
-          console.log(erro);
+          this.openDialog(
+            'Opss!',
+            'Ocorreu um erro na criação do documento, verifique se você selecionou as colunas que quer dentro do seu arquivo'
+          );
         }
       );
+  }
+
+  openDialog(title: string, message: string, status: number = 0): void {
+    const dialogRef = this.dialog.open(AlertComponent, {
+      data: {
+        title,
+        message,
+        status,
+      },
+    });
   }
 }

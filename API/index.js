@@ -933,6 +933,17 @@ app.post("/api/excel/create", async (req, res) => {
       }
     });
 
+    if (
+      aba_confirm_cliente.length == 0 &&
+      aba_confirm_funcionario.length == 0 &&
+      aba_confirm_produtos.length == 0 &&
+      aba_confirm_estoque.length == 0 &&
+      aba_confirm_servico.length == 0 &&
+      aba_confirm_eventos.length == 0 &&
+      aba_confirm_vendas.length == 0
+    )
+      throw new Error("Nenhum campo foi selecionado");
+
     const workbook = new ExcelJS.Workbook();
 
     if (aba_confirm_cliente.length != 0) {
@@ -1076,6 +1087,91 @@ app.post("/api/excel/create", async (req, res) => {
         //     objeto.descricao = "OIIII /n \n oiiii";
         //   }
         // }
+
+        for (let i = 0; i < data.length; i++) {
+          const row = sheet.addRow(data[i]);
+
+          row.eachCell((cell) => {
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: i % 2 === 0 ? "FFE5E5E5" : "FFFFFFFF" },
+            };
+            cell.font = {
+              color: { argb: "FF000000" },
+            };
+          });
+        }
+      }
+    }
+
+    if (aba_confirm_produtos.length != 0) {
+      const sheet = workbook.addWorksheet("Produtos");
+
+      let { data, error } = await supabase
+        .from("produto")
+        .select([...aba_confirm_produtos, "section(*)"].join(","))
+        .eq("section.tipo", "produto");
+      if (error) throw error;
+
+      if (data.length != 0) {
+        data = data.map(({ id, ...resto }) => resto);
+        data = data.map(({ created_at, ...resto }) => resto);
+        data = data.map(({ section_id, ...resto }) => resto);
+        data = data.map(({ section, ...resto }) => resto);
+
+        const chaves = Object.keys(data[0]);
+        const chaveOrdenacao = chaves[0];
+
+        if (aba_confirm_produtos.some((e) => e === "all"))
+          data.sort((a, b) => a.nome.localeCompare(b.nome));
+        else
+          data.sort((a, b) =>
+            a[chaveOrdenacao].localeCompare(b[chaveOrdenacao])
+          );
+
+        let colunas = [];
+
+        for (let i = 0; i < chaves.length; i++) {
+          const columnName = chaves[i];
+          colunas.push({
+            header:
+              columnName == "qtd"
+                ? "Quantidade"
+                : columnName == "valorcusto"
+                ? "Valor de Custo"
+                : columnName == "valorvenda"
+                ? "Valor de Venda"
+                : columnName.charAt(0).toUpperCase() +
+                  columnName.slice(1).toLowerCase(),
+            key: columnName.toLocaleLowerCase(),
+            width: 40,
+            height: 30,
+            style: {
+              font: {
+                bold: true,
+                color: { argb: "ffffff" },
+                size: 14,
+              },
+              fill: {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "df9c73" },
+              },
+            },
+          });
+        }
+
+        sheet.columns = colunas;
+
+        for (let objeto of data) {
+          if (chaves.some((e) => e === "valorcusto" || e === "all")) {
+            objeto.valorcusto = `R$${objeto.valorcusto}`;
+          }
+          if (chaves.some((e) => e === "valorvenda" || e === "all")) {
+            objeto.valorvenda = `R$${objeto.valorvenda}`;
+          }
+        }
 
         for (let i = 0; i < data.length; i++) {
           const row = sheet.addRow(data[i]);
