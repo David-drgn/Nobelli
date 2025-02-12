@@ -42,7 +42,7 @@ img {
   background-color: #efefef;
   padding: 5px;
   border-radius: 30px;
-  input {
+  :is(input) {
     border: 0px;
     width: 100%;
     background-color: transparent;
@@ -53,7 +53,7 @@ img {
   }
   &.check {
     background-color: transparent;
-    span {
+    :is(span) {
       text-align: center;
       color: #df9c73;
       width: fit-content;

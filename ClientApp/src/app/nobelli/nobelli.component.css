@@ -1,7 +1,7 @@
 :host {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
 }
@@ -13,10 +13,10 @@
 
 .mat-drawer-container {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100vw;
-  padding: 0px;
+  padding: 0;
   height: 100vh;
 }
 
@@ -31,11 +31,11 @@
   font-size: 30px !important;
   right: 5px;
   top: 5px;
+}
 
-  &.cell{
-    left: 10px;
-    top: 10px;
-  }
+.arrow_icon.cell {
+  left: 10px;
+  top: 10px;
 }
 
 .arrow_icon:hover {
@@ -61,23 +61,23 @@
   flex-direction: column;
   gap: 20px;
   align-items: center;
-  mat-icon {
-    color: #df9c73;
-    font-size: 30px;
-    width: auto;
-    height: auto;
-    cursor: pointer;
-  }
+}
+
+.routers_container mat-icon {
+  color: #df9c73;
+  font-size: 30px;
+  cursor: pointer;
 }
 
 .active {
   background-color: #df9c73;
   padding: 10px 20px;
   border-radius: 30px;
-  mat-icon {
-    color: #fde5dd;
-  }
   color: #fde5dd !important;
+}
+
+.active mat-icon {
+  color: #fde5dd;
 }
 
 div.item {
@@ -88,9 +88,10 @@ div.item {
   align-items: center;
   color: #df9c73;
   cursor: pointer;
-  span {
-    font-size: var(--subtitle-font-size) !important;
-  }
+}
+
+div.item span {
+  font-size: var(--subtitle-font-size) !important;
 }
 
 .header {
@@ -102,29 +103,28 @@ div.item {
   align-items: center;
   padding: 10px;
   box-sizing: border-box;
+}
 
-  .input {
-    display: flex;
-    align-items: center;
-    width: 50%;
-    margin: auto;
-    background-color: #efefef;
-    padding: 5px;
-    border-radius: 30px;
-    input {
-      border: 0px;
-      width: 100%;
-      background-color: transparent;
-    }
-  }
+.header .input {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  margin: auto;
+  background-color: #efefef;
+  padding: 5px;
+  border-radius: 30px;
+}
 
-  mat-icon {
-    color: #df9c73;
-    width: auto;
-    height: auto;
-  }
+.header .input input {
+  border: 0;
+  width: 100%;
+  background-color: transparent;
+}
 
-  mat-icon.account{
-    font-size: 50px;
-  }
+.header mat-icon {
+  color: #df9c73;
+}
+
+.header mat-icon.account {
+  font-size: 50px;
 }
