@@ -52,4 +52,9 @@ export class NobelliComponent {
   toggleDrawer() {
     if (this.screenWidth <= 600) this.drawer.toggle();
   }
+
+  logout() {
+    this.storage.token.next(null);
+    this.router.navigate(['/']);
+  }
 }

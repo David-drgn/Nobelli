@@ -120,6 +120,52 @@ export class ServicesComponent {
       });
   }
 
+  deleteService(item: any) {
+    this.dialog
+      .open(ConfirmationComponent, {
+        data: {
+          title: 'Certeza que desejas deletar o serviço?',
+          message: `Tem certeza mesmo que deseja excluir o serviço '${item.title}'? Isto levará a exclusão de todos os dados referentes a ela`,
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((response) => {
+        if (response) {
+          this.storage.load.next(true);
+          this.http.POST('servicoDelete', { id: item.id }).subscribe(
+            (res) => {
+              this.storage.load.next(false);
+              if (res.erro)
+                this.openDialog(
+                  'Ops!',
+                  'Ocorreu um erro ao deletar o serviço, por favor tente novamente mais tarde',
+                  2
+                );
+              else {
+                this.openDialog(
+                  'Tudo certo',
+                  'O serviço foi excluído com sucesso',
+                  1
+                );
+                this.getService();
+              }
+            },
+            (erro) => {
+              this.storage.load.next(false);
+              this.openDialog(
+                'Ops!',
+                'Ocorreu um erro ao deletar o serviço, por favor tente novamente mais tarde',
+                2
+              );
+
+              console.error(erro);
+            }
+          );
+        } else this.openDialog('Tudo certo', 'A operação foi cancelada', 1);
+      });
+  }
+
   servicoFilter(sections: any): any[] {
     return sections.filter((e: any) => e.tipo == 'servico');
   }

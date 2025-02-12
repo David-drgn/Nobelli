@@ -61,6 +61,17 @@ img {
   }
 }
 
+mat-icon.visibility {
+  cursor: pointer;
+  color: #df9c73;
+}
+
+.title {
+  font-size: var(--title-font-size);
+  color: #df9c73;
+  font-weight: 400;
+}
+
 input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -89,26 +100,15 @@ input[type="checkbox"]:checked::after {
   transform: translate(-50%, -50%);
 }
 
-mat-icon.visibility {
-  cursor: pointer;
-  color: #df9c73;
-}
-
-.title {
-  font-size: var(--title-font-size);
-  color: #df9c73;
-  font-weight: 400;
-}
-
 @media screen and (max-width: 600px) {
-  .wrapper{
+  .wrapper {
     width: 100%;
     padding: 20px;
     box-sizing: border-box;
     height: 100%;
     border-radius: 0px;
   }
-  img{
+  img {
     width: 50%;
   }
 }

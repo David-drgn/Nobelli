@@ -25,9 +25,10 @@
           </tr>
         </tbody>
       </table>
-      <div class="footer">
-        <mat-icon fontIcon="add" matTooltip="Adicionar cliente" [routerLink]="['../crud', 'client', 0]"></mat-icon>
-      </div>
+      <button class="button_all" [routerLink]="['../crud', 'client', 0]">
+        <span>Adicionar novo cliente</span>
+        <mat-icon fontIcon="add"></mat-icon>
+      </button>
     </mat-step>
 
     <mat-step label="Funcionários" state="done">

@@ -3,6 +3,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
+const ExcelJS = require("exceljs");
 
 const supabase = require("./Modules/BD/supabase");
 const crypto = require("./Modules/Crypto/crypto");
@@ -236,6 +238,42 @@ app.post("/api/produtoInsert", async (req, res) => {
   }
 });
 
+app.post("/api/serviceInsert", async (req, res) => {
+  const { token, title, descricao, section_id, valor, duracao } = req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const dadosNew = {
+      title: title ?? "",
+      descricao: descricao ?? "",
+      valor: valor == "" || valor == null ? 0 : valor,
+      duracao: duracao ?? "00:00",
+    };
+
+    const { data, error } = await supabase
+      .from("servico")
+      .insert({ ...dadosNew, section_id })
+      .select();
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      mensagem: "Conexão realizada com sucesso",
+      dados: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
 //Delete
 
 app.post("/api/clienteDelete", async (req, res) => {
@@ -382,6 +420,39 @@ app.post("/api/produtoDelete", async (req, res) => {
   }
 });
 
+app.post("/api/servicoDelete", async (req, res) => {
+  const { token, id } = req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const { error: eventosError } = await supabase
+      .from("eventos")
+      .delete()
+      .eq("servico_id", id);
+    if (eventosError) throw eventosError;
+
+    const { error: servicoError } = await supabase
+      .from("servico")
+      .delete()
+      .eq("id", id);
+    if (servicoError) throw servicoError;
+
+    res.status(200).json({
+      erro: false,
+      mensagem: "Conexão realizada com sucesso",
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
 //Update
 
 app.post("/api/clienteUpdate", async (req, res) => {
@@ -493,6 +564,43 @@ app.post("/api/produtoUpdate", async (req, res) => {
 
     const { data, error } = await supabase
       .from("produto")
+      .update(dadosAtualizados)
+      .eq("id", id)
+      .select();
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      mensagem: "Conexão realizada com sucesso",
+      dados: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
+app.post("/api/serviceUpdate", async (req, res) => {
+  const { token, title, descricao, valor, duracao, id } = req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const dadosAtualizados = {
+      title: title ?? "",
+      descricao: descricao ?? "",
+      valor: valor == "" || valor == null ? 0 : valor,
+      duracao: duracao ?? "00:00",
+    };
+
+    const { data, error } = await supabase
+      .from("servico")
       .update(dadosAtualizados)
       .eq("id", id)
       .select();
@@ -708,8 +816,340 @@ app.get("/api/produtoGet/:id/:token", async (req, res) => {
   }
 });
 
+app.get("/api/serviceGet/:id/:token", async (req, res) => {
+  const { token, id } = req.params;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    let { data, error } = await supabase
+      .from("servico")
+      .select("*, section(*)")
+      .eq("id", id);
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
+//Excel
+
+app.post("/api/excel/create", async (req, res) => {
+  const {
+    token,
+    cliente,
+    funcionario,
+    produtos,
+    estoque,
+    servico,
+    eventos,
+    vendas,
+  } = req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    let aba_confirm_cliente = [];
+    let aba_confirm_funcionario = [];
+    let aba_confirm_produtos = [];
+    let aba_confirm_estoque = [];
+    let aba_confirm_servico = [];
+    let aba_confirm_eventos = [];
+    let aba_confirm_vendas = [];
+
+    Object.entries(cliente).forEach(([chave, valor]) => {
+      if (valor) {
+        if (chave == "all") {
+          aba_confirm_cliente.push("*");
+          return;
+        } else aba_confirm_cliente.push(chave);
+      }
+    });
+
+    Object.entries(funcionario).forEach(([chave, valor]) => {
+      if (valor) {
+        if (chave == "all") {
+          aba_confirm_funcionario.push("*");
+          return;
+        } else aba_confirm_funcionario.push(chave);
+      }
+    });
+
+    Object.entries(produtos).forEach(([chave, valor]) => {
+      if (valor) {
+        if (chave == "all") {
+          aba_confirm_produtos.push("*");
+          return;
+        } else aba_confirm_produtos.push(chave);
+      }
+    });
+
+    Object.entries(estoque).forEach(([chave, valor]) => {
+      if (valor) {
+        if (chave == "all") {
+          aba_confirm_estoque.push("*");
+          return;
+        } else aba_confirm_estoque.push(chave);
+      }
+    });
+
+    Object.entries(servico).forEach(([chave, valor]) => {
+      if (valor) {
+        if (chave == "all") {
+          aba_confirm_servico.push("*");
+          return;
+        } else aba_confirm_servico.push(chave);
+      }
+    });
+
+    Object.entries(eventos).forEach(([chave, valor]) => {
+      if (valor) {
+        if (chave == "all") {
+          aba_confirm_eventos.push("*");
+          return;
+        } else aba_confirm_eventos.push(chave);
+      }
+    });
+
+    Object.entries(vendas).forEach(([chave, valor]) => {
+      if (valor) {
+        if (chave == "all") {
+          aba_confirm_vendas.push("*");
+          return;
+        } else aba_confirm_vendas.push(chave);
+      }
+    });
+
+    const workbook = new ExcelJS.Workbook();
+
+    if (aba_confirm_cliente.length != 0) {
+      const sheet = workbook.addWorksheet("Clientes");
+
+      let { data, error } = await supabase
+        .from("cliente")
+        .select(aba_confirm_cliente.join(","));
+
+      if (error) throw error;
+
+      if (data.length != 0) {
+        data = data.map(({ id, ...resto }) => resto);
+        data = data.map(({ created_at, ...resto }) => resto);
+
+        const chaves = Object.keys(data[0]);
+        const chaveOrdenacao = chaves[0];
+
+        if (aba_confirm_cliente.some((e) => e === "all"))
+          data.sort((a, b) => a.nome.localeCompare(b.nome));
+        else
+          data.sort((a, b) =>
+            a[chaveOrdenacao].localeCompare(b[chaveOrdenacao])
+          );
+
+        let colunas = [];
+
+        for (let i = 0; i < chaves.length; i++) {
+          const columnName = chaves[i];
+          colunas.push({
+            header:
+              columnName == "data_nasc"
+                ? "Data de nascimento"
+                : columnName.charAt(0).toUpperCase() +
+                  columnName.slice(1).toLowerCase(),
+            key: columnName.toLocaleLowerCase(),
+            width: 40,
+            height: 30,
+            style: {
+              font: {
+                bold: true,
+                color: { argb: "ffffff" },
+                size: 14,
+              },
+              fill: {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "df9c73" },
+              },
+            },
+          });
+        }
+
+        sheet.columns = colunas;
+
+        for (let objeto of data) {
+          if (chaves.some((e) => e === "endereco" || e === "all")) {
+            const endereco = await buscarEndereco(objeto.endereco);
+
+            if (endereco && !endereco.erro)
+              objeto.endereco = `${endereco.logradouro}, ${endereco.bairro}, ${endereco.localidade} - ${endereco.uf}`;
+            else objeto.endereco = "";
+          }
+
+          if (chaves.some((e) => e === "descricao" || e === "all")) {
+            objeto.descricao = "OIIII /n \n oiiii";
+          }
+        }
+
+        for (let i = 0; i < data.length; i++) {
+          const row = sheet.addRow(data[i]);
+
+          row.eachCell((cell) => {
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: i % 2 === 0 ? "FFE5E5E5" : "FFFFFFFF" },
+            };
+            cell.font = {
+              color: { argb: "FF000000" },
+            };
+          });
+        }
+      }
+    }
+
+    if (aba_confirm_funcionario.length != 0) {
+      const sheet = workbook.addWorksheet("Funcionários");
+
+      let { data, error } = await supabase
+        .from("funcionario")
+        .select(aba_confirm_funcionario.join(","));
+
+      if (error) throw error;
+
+      if (data.length != 0) {
+        data = data.map(({ id, ...resto }) => resto);
+        data = data.map(({ created_at, ...resto }) => resto);
+
+        const chaves = Object.keys(data[0]);
+        const chaveOrdenacao = chaves[0];
+
+        if (aba_confirm_funcionario.some((e) => e === "all"))
+          data.sort((a, b) => a.nome.localeCompare(b.nome));
+        else
+          data.sort((a, b) =>
+            a[chaveOrdenacao].localeCompare(b[chaveOrdenacao])
+          );
+
+        let colunas = [];
+
+        for (let i = 0; i < chaves.length; i++) {
+          const columnName = chaves[i];
+          colunas.push({
+            header:
+              columnName.charAt(0).toUpperCase() +
+              columnName.slice(1).toLowerCase(),
+            key: columnName.toLocaleLowerCase(),
+            width: 40,
+            height: 30,
+            style: {
+              font: {
+                bold: true,
+                color: { argb: "ffffff" },
+                size: 14,
+              },
+              fill: {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "df9c73" },
+              },
+            },
+          });
+        }
+
+        sheet.columns = colunas;
+
+        // for (let objeto of data) {
+
+        //   if (chaves.some((e) => e === "descricao" || e === "all")) {
+        //     objeto.descricao = "OIIII /n \n oiiii";
+        //   }
+        // }
+
+        for (let i = 0; i < data.length; i++) {
+          const row = sheet.addRow(data[i]);
+
+          row.eachCell((cell) => {
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: i % 2 === 0 ? "FFE5E5E5" : "FFFFFFFF" },
+            };
+            cell.font = {
+              color: { argb: "FF000000" },
+            };
+          });
+        }
+      }
+    }
+
+    // // Criando duas abas
+    // const sheet1 = workbook.addWorksheet("Teste1");
+    // const sheet2 = workbook.addWorksheet("Teste2");
+
+    // // Adicionando cabeçalhos
+    // sheet1.columns = [
+    //   { header: "Nome", key: "nome", width: 20 },
+    //   { header: "Link", key: "link", width: 30 },
+    // ];
+    // sheet2.columns = [
+    //   { header: "ID", key: "id", width: 10 },
+    //   { header: "Nome", key: "nome", width: 20 },
+    // ];
+
+    // // Adicionando dados na aba Teste2
+    // sheet2.addRow({ id: 1, nome: "David Raphael" });
+    // sheet2.addRow({ id: 2, nome: "Leara" });
+
+    // // Criando links na aba Teste1 para a aba Teste2
+    // sheet1.addRow({
+    //   nome: "Clique para ver",
+    //   link: { text: "Ver Detalhes", hyperlink: "#Teste2!A2" }, // Link para a linha correspondente
+    // });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+
+    res.setHeader("Content-Disposition", 'attachment; filename="dados.xlsx"');
+
+    await workbook.xlsx.write(res);
+
+    res.end();
+  } catch (error) {
+    console.error("Erro ao gerar Excel:", error);
+    res.status(500).send("Erro ao gerar Excel");
+  }
+});
+
 // Starter
 
 app.listen(port, () => {
   console.log(`Aplicação rodando na porta: ${port}`);
 });
+
+// Functions
+
+async function buscarEndereco(cep) {
+  const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+  try {
+    if (!cep) throw new Error("Cep null");
+    const resposta = await axios.get(url);
+    return resposta.data;
+  } catch (error) {
+    return null;
+  }
+}

@@ -46,7 +46,7 @@
           <span *ngIf="screenWidth > 600 ? !open : true">Excel</span>
         </div>
       </div>
-      <div [style]="screenWidth > 600? open? 'width: auto' : '' : ''" class="item active"
+      <div (click)="logout()" [style]="screenWidth > 600? open? 'width: auto' : '' : ''" class="item active"
         [matTooltip]="screenWidth > 600? open? 'Sair': '' : ''">
         <mat-icon fontIcon="logout"></mat-icon>
         <span *ngIf="screenWidth > 600 ? !open : true">Sair</span>

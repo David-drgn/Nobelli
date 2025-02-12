@@ -15,9 +15,15 @@ export class HttpServiceService {
     private storage: StorageServiceService
   ) {}
 
-  POST<T = any>(api: string, body: any = {}) {
+  POST<T = any>(
+    api: string,
+    body: any = {},
+    responseType: 'json' | 'blob' = 'json'
+  ) {
     body.token = this.storage.token.getValue();
-    return this.httpClient.post<T>(`${this.urlBase}/api/${api}`, body);
+    return this.httpClient.post<T>(`${this.urlBase}/api/${api}`, body, {
+      responseType: responseType as any,
+    });
   }
 
   GET<T = any>(api: string, body: any = {}) {

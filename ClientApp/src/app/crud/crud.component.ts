@@ -40,6 +40,13 @@ interface Produto {
   qtd: number;
 }
 
+interface Service {
+  title: string;
+  descricao: string;
+  valor: string;
+  duracao: string;
+}
+
 @Component({
   selector: 'app-crud',
   templateUrl: './crud.component.html',
@@ -78,6 +85,13 @@ export class CrudComponent {
     qtd: 0,
   };
 
+  service: Service = {
+    title: '',
+    descricao: '',
+    valor: '',
+    duracao: '',
+  };
+
   type: string | null;
   sectionType: string | null = null;
   sectionId: string | null = null;
@@ -95,7 +109,11 @@ export class CrudComponent {
       this.sectionType = this.type.split('@')[1];
       this.type = this.type.split('@')[0];
     }
-    if (this.type?.includes('product') || this.type?.includes('estoque')) {
+    if (
+      this.type?.includes('product') ||
+      this.type?.includes('estoque') ||
+      this.type?.includes('service')
+    ) {
       this.sectionId = this.type.split('@')[1];
       this.type = this.type.split('@')[0];
       if (this.sectionId) this.getSection();
@@ -116,6 +134,9 @@ export class CrudComponent {
           break;
         case 'estoque':
           this.getProduct();
+          break;
+        case 'service':
+          this.getService();
           break;
 
         default:
@@ -282,7 +303,9 @@ export class CrudComponent {
     this.http
       .GET(
         `sectionGet/${
-          this.type == 'product' || this.type == 'estoque'
+          this.type == 'product' ||
+          this.type == 'estoque' ||
+          this.type == 'service'
             ? this.sectionId
             : this.id
         }`
@@ -332,6 +355,39 @@ export class CrudComponent {
             valorvenda: res.data[0].valorvenda,
             descricao: res.data[0].descricao,
             qtd: res.data[0].qtd,
+          };
+
+          this.sectionCreate.title = res.data[0].section.title;
+        }
+      },
+      (erro) => {
+        this.openDialog(
+          'Ops!',
+          'Ocorreu um erro ao buscar o produto, por favor tente novamente mais tarde',
+          1
+        );
+        this.storage.load.next(false);
+      }
+    );
+  }
+
+  getService() {
+    this.storage.load.next(true);
+    this.http.GET(`serviceGet/${this.id}`).subscribe(
+      (res: any) => {
+        this.storage.load.next(false);
+        if (res.erro)
+          this.openDialog(
+            'Ops!',
+            'Ocorreu um erro ao buscar o produto, por favor tente novamente mais tarde',
+            1
+          );
+        else {
+          this.service = {
+            title: res.data[0].title,
+            valor: res.data[0].valor,
+            duracao: res.data[0].duracao,
+            descricao: res.data[0].descricao,
           };
 
           this.sectionCreate.title = res.data[0].section.title;
@@ -545,6 +601,57 @@ export class CrudComponent {
             this.id == '0'
               ? 'Ocorreu um erro ao cadastrar o produto, tente novamente mais tarde'
               : 'Ocorreu um erro ao atualizar os dados do produto, tente novamente daqui a pouco',
+            1
+          );
+        }
+      );
+  }
+
+  serviceCrud() {
+    if (!this.service.title) {
+      this.openDialog('Ops!', 'Por favor, preencha o nome do serviço', 2);
+      return;
+    }
+    this.storage.load.next(true);
+    this.http
+      .POST(this.id == '0' ? 'serviceInsert' : 'serviceUpdate', {
+        title: this.service.title,
+        descricao: this.service.descricao,
+        valor: this.service.valor,
+        duracao: this.service.duracao,
+        id: this.id,
+        section_id: this.sectionId,
+      })
+      .subscribe(
+        (res) => {
+          this.storage.load.next(false);
+          if (res.erro)
+            this.openDialog(
+              'Opss!',
+              this.id == '0'
+                ? 'Ocorreu um erro ao cadastrar o serviço, tente novamente mais tarde'
+                : 'Ocorreu um erro ao atualizar os dados do serviço, tente novamente daqui a pouco',
+              1
+            );
+          else {
+            this.openDialog(
+              'Sucesso!',
+              this.id == '0'
+                ? 'Seu serviço foi cadastrado com sucesso'
+                : 'Os dados do seu serviço foram atualizados com sucesso',
+              2
+            );
+            window.history.back();
+          }
+        },
+        (erro) => {
+          this.storage.load.next(false);
+          console.error(erro);
+          this.openDialog(
+            'Opss!',
+            this.id == '0'
+              ? 'Ocorreu um erro ao cadastrar o serviço, tente novamente mais tarde'
+              : 'Ocorreu um erro ao atualizar os dados do serviço, tente novamente daqui a pouco',
             1
           );
         }

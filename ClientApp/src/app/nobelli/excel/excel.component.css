@@ -1,0 +1,21 @@
+.container_data {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.container_campos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: fit-content;
+  padding: 10px;
+  align-items: baseline;
+}
+
+.input_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}

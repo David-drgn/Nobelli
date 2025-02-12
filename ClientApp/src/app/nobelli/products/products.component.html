@@ -23,7 +23,8 @@
                         </tr>
                     </thead>
                     <tbody class="body_table">
-                        <tr *ngFor="let itemProduto of produtosItemFilter(item.produto)" [matTooltip]="itemProduto.descricao">
+                        <tr *ngFor="let itemProduto of produtosItemFilter(item.produto)"
+                            [matTooltip]="itemProduto.descricao">
                             <td [innerHTML]="itemProduto.title | highLigth:search"></td>
                             <td [innerHTML]="(itemProduto.valorcusto | currencyMask:2) | highLigth:search"></td>
                             <td [innerHTML]="(itemProduto.valorvenda | currencyMask:2) | highLigth:search"></td>
@@ -44,10 +45,10 @@
                 <mat-icon>radio_button_unchecked</mat-icon>
             </ng-template>
         </mat-vertical-stepper>
-        <div class="footer">
-            <mat-icon fontIcon="add" matTooltip="Adicionar nova seção"
-                [routerLink]="['../crud', 'section@Produto', 0]"></mat-icon>
-        </div>
+        <button class="button_all" [routerLink]="['../crud', 'section@Produto', 0]">
+            <span>Adicionar nova seção</span>
+            <mat-icon fontIcon="add"></mat-icon>
+        </button>
     </mat-step>
 
     <mat-step label="Estoque" state="inventory">
@@ -72,7 +73,8 @@
                         </tr>
                     </thead>
                     <tbody class="body_table">
-                        <tr *ngFor="let itemProduto of estoqueItemFilter(item.produto)" [matTooltip]="itemProduto.descricao">
+                        <tr *ngFor="let itemProduto of estoqueItemFilter(item.produto)"
+                            [matTooltip]="itemProduto.descricao">
                             <td [innerHTML]="itemProduto.title | highLigth:search"></td>
                             <td [innerHTML]="(itemProduto.valorcusto | currencyMask:2) | highLigth:search"></td>
                             <td [innerHTML]="itemProduto.qtd | highLigth:search"></td>
@@ -92,10 +94,10 @@
                 <mat-icon>radio_button_unchecked</mat-icon>
             </ng-template>
         </mat-vertical-stepper>
-        <div class="footer">
-            <mat-icon fontIcon="add" matTooltip="Adicionar nova seção"
-                [routerLink]="['../crud', 'section@Estoque', 0]"></mat-icon>
-        </div>
+        <button class="button_all" [routerLink]="['../crud', 'section@Estoque', 0]">
+            <span>Adicionar nova seção</span>
+            <mat-icon fontIcon="add"></mat-icon>
+        </button>
     </mat-step>
 
     <ng-template matStepperIcon="shopping_cart">
