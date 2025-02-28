@@ -45,8 +45,15 @@ export class NobelliComponent {
     }
   }
 
+  private searchTimeout: any;
+
   search(text: string) {
-    this.storage.search.next(text);
+    clearTimeout(this.searchTimeout);
+
+    this.searchTimeout = setTimeout(() => {
+      console.log(text);
+      this.storage.search.next(text);
+    }, 700);
   }
 
   toggleDrawer() {

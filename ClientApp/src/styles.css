@@ -34,7 +34,8 @@ body {
 
 /* Barra de rolagem */
 *::-webkit-scrollbar {
-  width: 12px;
+  width: 5px;
+  height: 5px;
 }
 
 /* Trilha da barra */
@@ -129,8 +130,20 @@ textarea {
 .fc-toolbar-chunk {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+  margin: 0px !important;
+}
+
+.fc,
+.fc *,
+.fc ::after,
+.fc ::before {
+  overflow: hidden;
 }
 
 .title {
@@ -144,6 +157,11 @@ textarea {
 .mat-horizontal-stepper-header .mat-step-icon,
 .mat-vertical-stepper-header .mat-step-icon {
   background-color: #df9c73;
+}
+
+.mat-horizontal-stepper-content,
+.mat-vertical-content {
+  overflow-x: auto;
 }
 
 button {
