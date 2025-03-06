@@ -10,6 +10,7 @@ import { BandsComponent } from './nobelli/bands/bands.component';
 import { CrudComponent } from './crud/crud.component';
 import { ServicesComponent } from './nobelli/services/services.component';
 import { CanActiveGuard } from './guards/can-active.guard';
+import { ChatComponent } from './nobelli/chat/chat.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -46,6 +47,11 @@ const routes: Routes = [
       {
         path: 'docs',
         component: ExcelComponent,
+        canActivate: [CanActiveGuard],
+      },
+      {
+        path: 'chat',
+        component: ChatComponent,
         canActivate: [CanActiveGuard],
       },
     ],

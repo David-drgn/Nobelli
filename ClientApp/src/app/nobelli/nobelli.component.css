@@ -128,3 +128,25 @@ div.item span {
 .header mat-icon.account {
   font-size: 50px;
 }
+
+.iconHelp {
+  padding: 5px;
+  border-radius: 100%;
+  font-size: 20px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 1s;
+}
+
+.iconHelpActive {
+  background-color: #df9c73;
+  padding: 5px 10px;
+  border-radius: 30px;
+  font-size: 20px;
+  color: white !important;
+  cursor: pointer;
+}
+
+.iconHelp:hover {
+  font-size: 25px;
+}

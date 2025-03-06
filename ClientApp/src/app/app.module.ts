@@ -35,6 +35,7 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { MaskPipePipe } from './pipes/mask/mask-pipe.pipe';
 import { HighLigthPipe } from './pipes/highLight/high-ligth.pipe';
 import { CurrencyMaskPipe } from './pipes/currencyPipe/currency-mask.pipe';
+import { ChatComponent } from './nobelli/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { CurrencyMaskPipe } from './pipes/currencyPipe/currency-mask.pipe';
     ConfirmationComponent,
     MaskPipePipe,
     HighLigthPipe,
-    CurrencyMaskPipe
+    CurrencyMaskPipe,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

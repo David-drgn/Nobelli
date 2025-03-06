@@ -3,8 +3,7 @@
     [style.width]="screenWidth > 600 ? open ? '100px' : '350px' : ''" style="border: 0px;">
     <mat-icon *ngIf="screenWidth > 600" [fontIcon]="open? 'arrow_right' : 'arrow_left'" (click)="open = !open"
       class="arrow_icon"></mat-icon>
-    <mat-icon *ngIf="screenWidth <= 600" fontIcon="arrow_left" (click)="toggleDrawer()"
-      class="arrow_icon"></mat-icon>
+    <mat-icon *ngIf="screenWidth <= 600" fontIcon="arrow_left" (click)="toggleDrawer()" class="arrow_icon"></mat-icon>
     <div class="header_container">
       <img [style]="screenWidth > 600? open? 'width: 70px;' : 'width: 220px;' : 'width: 220px;'"
         [src]="screenWidth > 600? open? 'assets/Logo_Cut.png' : 'assets/Logo.png' : 'assets/Logo.png'" />
@@ -64,6 +63,8 @@
           matTooltip="Caso queira pesquisar mais de uma coisa, coloque uma vírgula antes da próxima palavra"
           (input)="search(inputSearch.value)" />
       </div>
+      <mat-icon fontIcon="forum" matTooltip="Chat bot Nobelli, pesquise por datas, clientes e resumos de seus produtos com a ajuda do seu chat personalizado" routerLink="./chat"
+        [class]="pathSelect == '/nobelli/chat'? 'iconHelpActive' : 'iconHelp'"></mat-icon>
     </div>
     <router-outlet></router-outlet>
   </mat-drawer-content>

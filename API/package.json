@@ -13,6 +13,7 @@
   "author": "David Raphael Gusatavo Neves",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.23.0",
     "@supabase/supabase-js": "^2.48.0",
     "axios": "^1.7.9",
     "body-parser": "^1.20.3",

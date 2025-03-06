@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const ExcelJS = require("exceljs");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const supabase = require("./Modules/BD/supabase");
 const crypto = require("./Modules/Crypto/crypto");
@@ -18,6 +19,80 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "20mb" }));
+
+const genAI = new GoogleGenerativeAI(process.env.API_KEY_GEMINI);
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+//Gemini
+
+app.post("/api/chat", async (req, res) => {
+  const { token, history } = req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const clientes = await supabase.from("cliente").select("*");
+
+    const eventos = await supabase.from("eventos").select("*");
+
+    const funcionarios = await supabase.from("funcionario").select("*");
+
+    const produtos = await supabase.from("produto").select("*");
+
+    const sections = await supabase.from("section").select("*");
+
+    const servicos = await supabase.from("servico").select("*");
+
+    const vendas = await supabase.from("venda").select("*");
+
+    const dataBase = {
+      clientes,
+      eventos,
+      funcionarios,
+      produtos,
+      sections,
+      servicos,
+      vendas,
+    };
+
+    const systemPrompt = [
+      {
+        role: "user",
+        parts: [
+          {
+            text: `
+          FORMATE AS RESPOSTAS EM HTML, USANDO TAGS, ISSO É OBRIGATÓRIO.
+          Você é uma assistente virtual treinada para ajudar funcionários da Nobelli.
+          Este é o seu banco de dados em JSON: ${JSON.stringify(dataBase)}
+          `,
+          },
+        ],
+      },
+    ];
+
+    const result = await model.generateContent({
+      contents: [...systemPrompt, ...history.contents],
+    });
+
+    let response = result.response.text();
+
+    response = response.replace("```html", "");
+    response = response.replace("```", "");
+
+    res.status(200).json({
+      erro: false,
+      mensagem: response,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Gemini",
+      detalhes: error.message,
+    });
+  }
+});
 
 //Login
 

@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="chat" #chatContainer>
+        <div [class]="item.role == 'user'? 'card user' : 'card bot'" *ngFor="let item of history.contents">
+            <span [innerHTML]="item.parts[0].text"></span>
+        </div>
+    </div>
+    <div class="input">
+        <input type="text" placeholder="Faça uma pergunta ou peça para ele puxar dados de um produto"
+            [(ngModel)]="message" (keydown.enter)="chatQuest()">
+        <mat-icon fontIcon="search" (click)="chatQuest()"></mat-icon>
+    </div>
+</div>
