@@ -42,10 +42,6 @@ export class ChatComponent {
     }
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom();
-  }
-
   chatQuest() {
     if (this.message == '') {
       this.openDialog('Opps!', 'Por favor realize uma pergunta');
@@ -78,11 +74,13 @@ export class ChatComponent {
               },
             ],
           });
+          this.scrollToBottom();
         } else {
           this.history.contents.push({
             role: 'model',
             parts: [{ text: res.mensagem }],
           });
+          this.scrollToBottom();
         }
       },
       (erro: any) => {
@@ -92,6 +90,15 @@ export class ChatComponent {
           'Não conseguimos realizar a conexão com o chat',
           1
         );
+        this.history.contents.push({
+          role: 'model',
+          parts: [
+            {
+              text: 'Aparentemente, algo deu errado, por favor, tente novamente mais tarde',
+            },
+          ],
+        });
+        this.scrollToBottom();
         console.error(erro);
       }
     );
