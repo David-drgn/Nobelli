@@ -64,6 +64,7 @@ app.post("/api/chat", async (req, res) => {
           {
             text: `
           FORMATE AS RESPOSTAS EM HTML, USANDO TAGS, ISSO É OBRIGATÓRIO.
+          SEMPRE FORMATE AS DATAS PARA O MODELO dd/mm/yy hh:mm
           Você é uma assistente virtual treinada para ajudar funcionários da Nobelli.
           Este é o seu banco de dados em JSON: ${JSON.stringify(dataBase)}
           `,
