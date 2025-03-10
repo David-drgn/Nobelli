@@ -431,3 +431,59 @@
     </div>
     <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
+
+<div class="wrapper_alert" *ngIf="type == 'band'">
+    <div class="container_crud">
+        <span class="title">Adicione os dados da venda</span>
+        <div class="container">
+            <mat-stepper [linear]="false" #stepper animationDuration="1000">
+                <mat-step>
+                    <ng-template matStepLabel>Dados iniciais</ng-template>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Cliente
+                                <mat-icon fontIcon="person"></mat-icon>
+                            </span>
+                            <select [(ngModel)]="service.duracao">
+                                <option value="">Cleide</option>
+                            </select>
+                        </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Valor Total
+                                <mat-icon fontIcon="payments"></mat-icon>
+                            </span>
+                            <input type="number" step="0.01" min="0.01" max="1000" placeholder="Valor"
+                                [(ngModel)]="service.valor" disabled="true">
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Datas e Hora
+                            <mat-icon fontIcon="calendar_month"></mat-icon>
+                        </span>
+                        <input type="datetime-local">
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Produtos</ng-template>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Concluir</ng-template>
+                    <button (click)="serviceCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
+                </mat-step>
+
+                <ng-template matStepperIcon="done">
+                    <mat-icon>radio_button_unchecked</mat-icon>
+                </ng-template>
+
+                <ng-template matStepperIcon="edit">
+                    <mat-icon>radio_button_unchecked</mat-icon>
+                </ng-template>
+
+            </mat-stepper>
+        </div>
+    </div>
+    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
+</div>

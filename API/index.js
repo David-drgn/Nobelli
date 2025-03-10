@@ -64,7 +64,7 @@ app.post("/api/chat", async (req, res) => {
           {
             text: `
           FORMATE AS RESPOSTAS EM HTML, USANDO TAGS, ISSO É OBRIGATÓRIO.
-          SEMPRE FORMATE AS DATAS PARA O MODELO dd/mm/yy hh:mm
+          SEMPRE FORMATE AS DATAS PARA O MODELO dd/mm/yy hh:mm ou dd/mm/yy caso possível
           Você é uma assistente virtual treinada para ajudar funcionários da Nobelli.
           Este é o seu banco de dados em JSON: ${JSON.stringify(dataBase)}
           `,
@@ -101,7 +101,15 @@ app.post("/api/login", async (req, res) => {
   try {
     const { login, password, check } = req.body;
 
-    if (login == process.env.LOGIN && password == process.env.PASSWORD) {
+    let { data: data, error } = await supabase
+      .from("login")
+      .select("*")
+      .eq("email", login)
+      .eq("password", password);
+
+    if (error) throw new Error(error.message);
+
+    if (data.length != 0) {
       const token = jwt.sign(
         {
           data: "autorizado",
