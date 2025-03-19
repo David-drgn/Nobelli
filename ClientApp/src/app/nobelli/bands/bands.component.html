@@ -10,17 +10,15 @@
             </tr>
         </thead>
         <tbody class="body_table">
-            <!-- <tr *ngFor="let item of clientFilter(listClient)" [class]="item == clientSelect? 'selected' : ''">
-                <td [innerHTML]="item.nome | highLigth:search"></td>
-                <td *ngIf="item.venda.length != 0"
-                    [innerHTML]="(lastDate(item.venda) | date:'dd/MM/yyyy') || '' | highLigth:search"></td>
-                <td *ngIf="item.venda.length == 0">Nunca realizou um compra</td>
-                <td [innerHTML]="(item.data_nasc | date:'dd/MM/yyyy') || '' | highLigth:search"></td>
-                <td class="optionTd" [routerLink]="['../crud', 'client', item.id]"><mat-icon fontIcon="edit"
+            <tr *ngFor="let item of vendaItemFilter(list)">
+                <td [innerHTML]="item.cliente.nome | highLigth:search"></td>
+                <td [innerHTML]="(item.data | date:'dd/MM/yyyy hh:MM') || '' | highLigth:search"></td>
+                <td [innerHTML]="(item.valortotal | currencyMask:2) | highLigth:search"></td>
+                <td class="optionTd" [routerLink]="['../crud', 'band', item.id]"><mat-icon fontIcon="edit"
                         matTooltip="Clique aqui para editar"></mat-icon></td>
-                <td class="optionTd" (click)="deleteClient(item)"><mat-icon fontIcon="delete"
-                        matTooltip="Deletar cliente"></mat-icon></td>
-            </tr> -->
+                <td class="optionTd" (click)="deleteVenda(item)"><mat-icon fontIcon="delete"
+                        matTooltip="Deletar venda"></mat-icon></td>
+            </tr>
         </tbody>
     </table>
     <button class="button_all" [routerLink]="['../crud', 'band', 0]">

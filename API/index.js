@@ -358,6 +358,44 @@ app.post("/api/serviceInsert", async (req, res) => {
   }
 });
 
+app.post("/api/bandInsert", async (req, res) => {
+  const { token, cliente_id, funcionario_id, valortotal, produtos, dataset } =
+    req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const dadosNew = {
+      cliente_id: cliente_id ?? "",
+      funcionario_id: funcionario_id ?? "",
+      valortotal: valortotal == "" || valortotal == null ? 0 : valortotal,
+      produtos: produtos ?? null,
+      data: dataset ?? Date.now(),
+    };
+
+    const { data, error } = await supabase
+      .from("venda")
+      .insert(dadosNew)
+      .select();
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      mensagem: "Conexão realizada com sucesso",
+      dados: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
 //Delete
 
 app.post("/api/clienteDelete", async (req, res) => {
@@ -523,6 +561,30 @@ app.post("/api/servicoDelete", async (req, res) => {
       .delete()
       .eq("id", id);
     if (servicoError) throw servicoError;
+
+    res.status(200).json({
+      erro: false,
+      mensagem: "Conexão realizada com sucesso",
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
+app.post("/api/bandDelete", async (req, res) => {
+  const { token, id } = req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const { error } = await supabase.from("venda").delete().eq("id", id);
+    if (error) throw error;
 
     res.status(200).json({
       erro: false,
@@ -705,6 +767,45 @@ app.post("/api/serviceUpdate", async (req, res) => {
   }
 });
 
+app.post("/api/bandUpdate", async (req, res) => {
+  const { token, id, cliente_id, funcionario_id, valortotal, produtos, dataset } =
+    req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const dadosAtualizados = {
+      cliente_id: cliente_id ?? "",
+      funcionario_id: funcionario_id ?? "",
+      valortotal: valortotal == "" || valortotal == null ? 0 : valortotal,
+      produtos: produtos ?? null,
+      data: dataset ?? Date.now(),
+    };
+
+    const { data, error } = await supabase
+      .from("venda")
+      .update(dadosAtualizados)
+      .eq("id", id)
+      .select();
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      mensagem: "Conexão realizada com sucesso",
+      dados: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
 //Getters
 
 app.get("/api/clienteGet/:token", async (req, res) => {
@@ -800,6 +901,61 @@ app.get("/api/funcionarioGet/:id/:token", async (req, res) => {
     let { data, error } = await supabase
       .from("funcionario")
       .select("*, eventos(*), venda(*)")
+      .eq("id", id);
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
+app.get("/api/bandGet/:token", async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    let { data, error } = await supabase
+      .from("venda")
+      .select("*, cliente(*), funcionario(*)");
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
+app.get("/api/bandGet/:id/:token", async (req, res) => {
+  const { id, token } = req.params;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    let { data, error } = await supabase
+      .from("venda")
+      .select("*, cliente(*), funcionario(*)")
       .eq("id", id);
 
     if (error) throw error;

@@ -163,7 +163,6 @@
             </mat-stepper>
         </div>
     </div>
-    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
 
 <div class="wrapper_alert" *ngIf="type == 'section'">
@@ -190,7 +189,6 @@
             <button (click)="sectionCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
         </div>
     </div>
-    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
 
 <div class="wrapper_alert" *ngIf="type == 'funcionario'">
@@ -223,7 +221,6 @@
             <button (click)="funcionarioCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
         </div>
     </div>
-    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
 
 <div class="wrapper_alert" *ngIf="type == 'product' || type == 'estoque'">
@@ -283,7 +280,6 @@
             <button (click)="produtoCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
         </div>
     </div>
-    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
 
 <div class="wrapper_alert" *ngIf="type == 'service'">
@@ -429,7 +425,6 @@
             <button (click)="serviceCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
         </div>
     </div>
-    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
 
 <div class="wrapper_alert" *ngIf="type == 'band'">
@@ -445,17 +440,20 @@
                                 Cliente
                                 <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <select [(ngModel)]="service.duracao">
-                                <option value="">Cleide</option>
+                            <select [(ngModel)]="bandInfo.idCliente">
+                                <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
+                                    {{cliente.nome}}</option>
                             </select>
                         </div>
                         <div class="wrapper_input">
                             <span>
-                                Valor Total
-                                <mat-icon fontIcon="payments"></mat-icon>
+                                Funcionário
+                                <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <input type="number" step="0.01" min="0.01" max="1000" placeholder="Valor"
-                                [(ngModel)]="service.valor" disabled="true">
+                            <select [(ngModel)]="bandInfo.idFuncionario">
+                                <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
+                                    {{func.nome}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="wrapper_input">
@@ -463,15 +461,129 @@
                             Datas e Hora
                             <mat-icon fontIcon="calendar_month"></mat-icon>
                         </span>
-                        <input type="datetime-local">
+                        <input type="datetime-local" [(ngModel)]="bandInfo.data">
                     </div>
                 </mat-step>
                 <mat-step>
                     <ng-template matStepLabel>Produtos</ng-template>
+                    <div class="section" *ngFor="let section of bandInfo.produtos; let i = index">
+                        <div class="wrapper_input section_title">
+                            <span>
+                                Produto
+                            </span>
+                            <div class="wrapper_input">
+                                <select [(ngModel)]="section.id">
+                                    <!-- <optgroup label="Produtos"> -->
+                                    <option *ngFor="let product of selectProduct(); let i = index" [value]="product.id">
+                                        {{product.title}}</option>
+                                    <!-- </optgroup> -->
+                                    <!-- <optgroup label="Servico">
+                                        <option *ngFor="let service of selectService(); let i = index"
+                                            [value]="service.id">{{service.title}}</option>
+                                    </optgroup> -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="section_item">
+                            <div class="wrapper_input">
+                                <span>
+                                    Quantidade [ Valor unitário: {{unitValue(section.id)}} ]
+                                </span>
+                                <input type="number" [(ngModel)]="section.quantidade" min="1">
+                            </div>
+                            <div class="wrapper_input">
+                                <span>
+                                    Valor Total
+                                </span>
+                                <input type="number" step="0.01" min="0.01" [value]="section.valor * section.quantidade"
+                                    disabled>
+                            </div>
+                        </div>
+                        <mat-icon fontIcon="remove" (click)="removeProduct(i)" matTooltip="Remover produto"></mat-icon>
+                    </div>
+                    <mat-icon fontIcon="add" (click)="addProduct()" matTooltip="Adicionar compra"
+                        class="add_product"></mat-icon>
+                    <div class="wrapper_input">
+                        <span>
+                            Valor Total Calculado
+                            <mat-icon fontIcon="payments"></mat-icon>
+                        </span>
+                        <span>R${{totalValor()}}</span>
+                    </div>
                 </mat-step>
                 <mat-step>
                     <ng-template matStepLabel>Concluir</ng-template>
-                    <button (click)="serviceCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Cliente
+                                <mat-icon fontIcon="person"></mat-icon>
+                            </span>
+                            <select [(ngModel)]="bandInfo.idCliente" disabled>
+                                <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
+                                    {{cliente.nome}}</option>
+                            </select>
+                        </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Funcionário
+                                <mat-icon fontIcon="person"></mat-icon>
+                            </span>
+                            <select [(ngModel)]="bandInfo.idFuncionario" disabled>
+                                <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
+                                    {{func.nome}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Datas e Hora
+                            <mat-icon fontIcon="calendar_month"></mat-icon>
+                        </span>
+                        <input type="datetime-local" [(ngModel)]="bandInfo.data" disabled>
+                    </div>
+                    <div class="section" *ngFor="let section of bandInfo.produtos; let i = index">
+                        <div class="wrapper_input section_title">
+                            <span>
+                                Produto
+                            </span>
+                            <div class="wrapper_input">
+                                <select [(ngModel)]="section.id" disabled>
+                                    <!-- <optgroup label="Produtos"> -->
+                                    <option *ngFor="let product of selectProduct(); let i = index" [value]="product.id">
+                                        {{product.title}}</option>
+                                    <!-- </optgroup> -->
+                                    <!-- <optgroup label="Servico">
+                                        <option *ngFor="let service of selectService(); let i = index"
+                                            [value]="service.id">{{service.title}}</option>
+                                    </optgroup> -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="section_item">
+                            <div class="wrapper_input">
+                                <span>
+                                    Quantidade [ Valor unitário: {{unitValue(section.id)}} ]
+                                </span>
+                                <input type="number" [(ngModel)]="section.quantidade" min="1" disabled>
+                            </div>
+                            <div class="wrapper_input">
+                                <span>
+                                    Valor Total
+                                </span>
+                                <input type="number" step="0.01" min="0.01" [value]="section.valor * section.quantidade"
+                                    disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Valor Total Calculado
+                            <mat-icon fontIcon="payments"></mat-icon>
+                        </span>
+                        <span>R${{totalValor()}}</span>
+                    </div>
+                    <button (click)="vendaCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
                 </mat-step>
 
                 <ng-template matStepperIcon="done">
@@ -485,5 +597,4 @@
             </mat-stepper>
         </div>
     </div>
-    <mat-icon class="excel_button" matTooltip="Exportar dados para excel" fontIcon="description"></mat-icon>
 </div>
