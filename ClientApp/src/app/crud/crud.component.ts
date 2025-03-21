@@ -869,10 +869,10 @@ export class CrudComponent {
 
       if (band) {
         let produto = products.find((e: any) => e.id === item);
-        band.valor = produto?.valorcusto ?? 0;
+        band.valor = produto?.valorvenda ?? 0;
       }
 
-      return `R$${products.find((e: any) => e.id === item).valorcusto}`;
+      return `R$${products.find((e: any) => e.id === item).valorvenda}`;
     }
     return;
   }
@@ -882,5 +882,19 @@ export class CrudComponent {
       (acc, item) => acc + item.valor * item.quantidade,
       0
     );
+  }
+
+  displayFn(option?: any): string {
+    return option ? option.nome : '';
+  }
+
+  selecionarCliente(cliente: any) {
+    console.log(cliente);
+    this.bandInfo.idCliente = cliente.id;
+  }
+
+  fnder(e: any): string {
+    if (e) return this.infoClient.find((w: any) => w.id === e).nome;
+    else return '';
   }
 }
