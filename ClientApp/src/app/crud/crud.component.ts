@@ -61,9 +61,10 @@ interface Service {
 }
 
 @Component({
-  selector: 'app-crud',
-  templateUrl: './crud.component.html',
-  styleUrls: ['./crud.component.css'],
+    selector: 'app-crud',
+    templateUrl: './crud.component.html',
+    styleUrls: ['./crud.component.css'],
+    standalone: false
 })
 export class CrudComponent {
   sections: Section[] = [];

@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'currencyMask',
+    name: 'currencyMask',
+    standalone: false
 })
 export class CurrencyMaskPipe implements PipeTransform {
   transform(value: any, decimalPlaces: number = 2): string {

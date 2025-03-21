@@ -6,9 +6,10 @@ import { HttpServiceService } from 'src/app/services/http/http-service.service';
 import { StorageServiceService } from 'src/app/services/storage/storage-service.service';
 
 @Component({
-  selector: 'app-bands',
-  templateUrl: './bands.component.html',
-  styleUrls: ['./bands.component.css'],
+    selector: 'app-bands',
+    templateUrl: './bands.component.html',
+    styleUrls: ['./bands.component.css'],
+    standalone: false
 })
 export class BandsComponent {
   list: any[] = [];

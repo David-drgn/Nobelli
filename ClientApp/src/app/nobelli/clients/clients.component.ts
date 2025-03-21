@@ -7,9 +7,10 @@ import { HttpServiceService } from 'src/app/services/http/http-service.service';
 import { StorageServiceService } from 'src/app/services/storage/storage-service.service';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.css'],
+    selector: 'app-clients',
+    templateUrl: './clients.component.html',
+    styleUrls: ['./clients.component.css'],
+    standalone: false
 })
 export class ClientsComponent {
   listClient: any;

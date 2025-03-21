@@ -68,9 +68,10 @@ interface Vendas {
 }
 
 @Component({
-  selector: 'app-excel',
-  templateUrl: './excel.component.html',
-  styleUrls: ['./excel.component.css'],
+    selector: 'app-excel',
+    templateUrl: './excel.component.html',
+    styleUrls: ['./excel.component.css'],
+    standalone: false
 })
 export class ExcelComponent {
   cliente: Cliente = {

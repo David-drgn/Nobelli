@@ -7,9 +7,10 @@ import { HttpServiceService } from 'src/app/services/http/http-service.service';
 import { StorageServiceService } from 'src/app/services/storage/storage-service.service';
 
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css'],
+    selector: 'app-products',
+    templateUrl: './products.component.html',
+    styleUrls: ['./products.component.css'],
+    standalone: false
 })
 export class ProductsComponent {
   list: any[] = [];

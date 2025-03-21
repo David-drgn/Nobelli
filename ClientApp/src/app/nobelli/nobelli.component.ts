@@ -4,9 +4,10 @@ import { StorageServiceService } from '../services/storage/storage-service.servi
 import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'app-nobelli',
-  templateUrl: './nobelli.component.html',
-  styleUrls: ['./nobelli.component.css'],
+    selector: 'app-nobelli',
+    templateUrl: './nobelli.component.html',
+    styleUrls: ['./nobelli.component.css'],
+    standalone: false
 })
 export class NobelliComponent {
   open: boolean = true;

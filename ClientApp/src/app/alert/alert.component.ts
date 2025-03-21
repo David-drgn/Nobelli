@@ -6,9 +6,10 @@ import {
 } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-alert',
-  templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.css'],
+    selector: 'app-alert',
+    templateUrl: './alert.component.html',
+    styleUrls: ['./alert.component.css'],
+    standalone: false
 })
 export class AlertComponent {
   constructor(

@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Pipe({
-  name: 'highLigth',
+    name: 'highLigth',
+    standalone: false
 })
 export class HighLigthPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}

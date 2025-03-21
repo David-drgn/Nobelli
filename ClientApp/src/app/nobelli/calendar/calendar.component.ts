@@ -11,9 +11,10 @@ import { AlertComponent } from 'src/app/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-calendar',
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css'],
+    selector: 'app-calendar',
+    templateUrl: './calendar.component.html',
+    styleUrls: ['./calendar.component.css'],
+    standalone: false
 })
 export class CalendarComponent {
   viewCalendar: number = 1;
