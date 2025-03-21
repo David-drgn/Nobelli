@@ -440,20 +440,22 @@
                                 Cliente
                                 <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <select [(ngModel)]="bandInfo.idCliente">
+                            <!-- <select [(ngModel)]="bandInfo.idCliente">
                                 <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
                                     {{cliente.nome}}</option>
-                            </select>
+                            </select> -->
+                            <p-autocomplete [(ngModel)]="bandInfo.idCliente" [suggestions]="displayFn()" (completeMethod)="search($event, infoClient)" />
                         </div>
                         <div class="wrapper_input">
                             <span>
                                 Funcionário
                                 <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <select [(ngModel)]="bandInfo.idFuncionario">
+                            <p-autocomplete [(ngModel)]="bandInfo.idFuncionario" [suggestions]="displayFn()" (completeMethod)="search($event, infoFuncionario)" />
+                            <!-- <select [(ngModel)]="bandInfo.idFuncionario">
                                 <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
                                     {{func.nome}}</option>
-                            </select>
+                            </select> -->
                         </div>
                     </div>
                     <div class="wrapper_input">

@@ -4,6 +4,7 @@ import { HttpServiceService } from '../services/http/http-service.service';
 import { StorageServiceService } from '../services/storage/storage-service.service';
 import { AlertComponent } from '../alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 
 interface Section {
   title: string;
@@ -61,10 +62,10 @@ interface Service {
 }
 
 @Component({
-    selector: 'app-crud',
-    templateUrl: './crud.component.html',
-    styleUrls: ['./crud.component.css'],
-    standalone: false
+  selector: 'app-crud',
+  templateUrl: './crud.component.html',
+  styleUrls: ['./crud.component.css'],
+  standalone: false,
 })
 export class CrudComponent {
   sections: Section[] = [];
@@ -885,17 +886,22 @@ export class CrudComponent {
     );
   }
 
-  displayFn(option?: any): string {
-    return option ? option.nome : '';
+  displayFn() {
+    if (this.infoAux) {
+      return this.infoAux
+        .map((e: any) => e.nome)
+        .sort((a: string, b: string) => a.localeCompare(b));
+    } else {
+      return this.infoClient
+        .map((e: any) => e.nome)
+        .sort((a: string, b: string) => a.localeCompare(b));
+    }
   }
 
-  selecionarCliente(cliente: any) {
-    console.log(cliente);
-    this.bandInfo.idCliente = cliente.id;
-  }
-
-  fnder(e: any): string {
-    if (e) return this.infoClient.find((w: any) => w.id === e).nome;
-    else return '';
+  infoAux: any;
+  search(event: AutoCompleteCompleteEvent, info: any) {
+    this.infoAux = info.filter((e: any) =>
+      e.nome.toLowerCase().includes(event.query.toLowerCase())
+    );
   }
 }

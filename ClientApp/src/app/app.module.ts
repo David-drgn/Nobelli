@@ -18,7 +18,10 @@ import { CalendarComponent } from './nobelli/calendar/calendar.component';
 import { ProductsComponent } from './nobelli/products/products.component';
 import { ExcelComponent } from './nobelli/excel/excel.component';
 import { BandsComponent } from './nobelli/bands/bands.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { LoadComponent } from './load/load.component';
 import { AlertComponent } from './alert/alert.component';
 
@@ -37,45 +40,54 @@ import { HighLigthPipe } from './pipes/highLight/high-ligth.pipe';
 import { CurrencyMaskPipe } from './pipes/currencyPipe/currency-mask.pipe';
 import { ChatComponent } from './nobelli/chat/chat.component';
 
-@NgModule({ declarations: [
-        AppComponent,
-        LoginComponent,
-        NobelliComponent,
-        ClientsComponent,
-        CalendarComponent,
-        ProductsComponent,
-        ExcelComponent,
-        BandsComponent,
-        LoadComponent,
-        AlertComponent,
-        CrudComponent,
-        ServicesComponent,
-        ConfirmationComponent,
-        MaskPipePipe,
-        HighLigthPipe,
-        CurrencyMaskPipe,
-        ChatComponent
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        MatDialogModule,
-        FullCalendarModule,
-        MatAutocompleteModule,
-        MatSidenavModule,
-        BrowserAnimationsModule,
-        MatIconModule,
-        NgxMaskDirective,
-        NgxMaskPipe,
-        FormsModule,
-        MatSelectModule,
-        MatTooltipModule,
-        MatStepperModule,
-        ReactiveFormsModule], providers: [
-        provideNgxMask(),
-        {
-            provide: STEPPER_GLOBAL_OPTIONS,
-            useValue: { displayDefaultIndicatorType: false },
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
+import { AutoCompleteModule } from 'primeng/autocomplete';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    NobelliComponent,
+    ClientsComponent,
+    CalendarComponent,
+    ProductsComponent,
+    ExcelComponent,
+    BandsComponent,
+    LoadComponent,
+    AlertComponent,
+    CrudComponent,
+    ServicesComponent,
+    ConfirmationComponent,
+    MaskPipePipe,
+    HighLigthPipe,
+    CurrencyMaskPipe,
+    ChatComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    MatDialogModule,
+    FullCalendarModule,
+    MatAutocompleteModule,
+    MatSidenavModule,
+    BrowserAnimationsModule,
+    MatIconModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    FormsModule,
+    MatSelectModule,
+    MatTooltipModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+    AutoCompleteModule
+  ],
+  providers: [
+    provideNgxMask(),
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
+})
 export class AppModule {}
