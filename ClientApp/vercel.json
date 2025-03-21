@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "ClientApp/package.json",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "ClientApp/dist/**/*",
+        "use": "@vercel/static"
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ]
+  }
+  
