@@ -3,8 +3,9 @@
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background: white;
+  background: var(--back-color);
   position: relative;
+  color: var(--primary-color);
 }
 
 /* .alert_button {

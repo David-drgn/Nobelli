@@ -65,6 +65,7 @@ app.post("/api/chat", async (req, res) => {
             text: `
           FORMATE AS RESPOSTAS EM HTML, USANDO TAGS, ISSO É OBRIGATÓRIO.
           SEMPRE FORMATE AS DATAS PARA O MODELO dd/mm/yy hh:mm ou dd/mm/yy caso possível
+          NUNCA PASSE O ID PRIMÁRIO DOS REGISTROS, ISTO É CONFIDENCIAL
           Você é uma assistente virtual treinada para ajudar funcionários da Nobelli.
           Este é o seu banco de dados em JSON: ${JSON.stringify(dataBase)}
           `,
@@ -768,8 +769,15 @@ app.post("/api/serviceUpdate", async (req, res) => {
 });
 
 app.post("/api/bandUpdate", async (req, res) => {
-  const { token, id, cliente_id, funcionario_id, valortotal, produtos, dataset } =
-    req.body;
+  const {
+    token,
+    id,
+    cliente_id,
+    funcionario_id,
+    valortotal,
+    produtos,
+    dataset,
+  } = req.body;
 
   try {
     var decoded = tokenVerify(token);
@@ -818,7 +826,8 @@ app.get("/api/clienteGet/:token", async (req, res) => {
 
     let { data, error } = await supabase
       .from("cliente")
-      .select("*, eventos(*), venda(*)");
+      .select("*, eventos(*), venda(*)")
+      .order("nome", { ascending: true });
 
     if (error) throw error;
 
@@ -873,7 +882,8 @@ app.get("/api/funcionarioGet/:token", async (req, res) => {
 
     let { data, error } = await supabase
       .from("funcionario")
-      .select("*, eventos(*), venda(*)");
+      .select("*, eventos(*), venda(*)")
+      .order("nome", { ascending: true });
 
     if (error) throw error;
 
@@ -928,7 +938,8 @@ app.get("/api/bandGet/:token", async (req, res) => {
 
     let { data, error } = await supabase
       .from("venda")
-      .select("*, cliente(*), funcionario(*)");
+      .select("*, cliente(*), funcionario(*)")
+      .order("data", { ascending: true });
 
     if (error) throw error;
 
@@ -983,7 +994,8 @@ app.get("/api/sectionGet/:token", async (req, res) => {
 
     let { data, error } = await supabase
       .from("section")
-      .select("*, produto(*), servico(*)");
+      .select("*, produto(*), servico(*)")
+      .order("title", { ascending: true });
 
     if (error) throw error;
 

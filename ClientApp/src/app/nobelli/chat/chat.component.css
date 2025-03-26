@@ -7,6 +7,7 @@
   flex-direction: column;
   margin: auto;
   gap: 10px;
+  background-color: var(--back-color);
   box-sizing: border-box;
 }
 
@@ -27,20 +28,23 @@
   padding: 5px 15px;
   box-sizing: border-box;
   border-radius: 30px;
-  background-color: #df9c73;
-  color: white;
+  background-color: var(--primary-color);
+  span {
+    color: var(--second-color);
+  }
 }
 
 .user {
-  background-color: #fde5dd;
-  color: #df9c73;
+  background-color: var(--second-color);
+  span {
+    color: var(--primary-color);
+  }
   margin-left: auto;
 }
 
 .input {
   width: 90%;
-  background-color: #df9c73;
-  color: white;
+  background-color: var(--primary-color);
   display: flex;
   align-items: center;
   border-radius: 30px;
@@ -49,18 +53,18 @@
 }
 
 mat-icon {
-  background-color: white;
+  background-color: var(--second-color);
   border-radius: 100%;
-  color: #df9c73;
+  color: var(--primary-color);
   padding: 5px;
   cursor: pointer;
   transition: all 1s;
 }
 
 mat-icon:hover {
-  color: white;
-  border: 1px solid white;
-  background-color: #df9c73;
+  color: var(--primary-color);
+  border: 1px solid var(--second-color);
+  background-color: var(--second-color);
 }
 
 input {
@@ -68,5 +72,4 @@ input {
   height: 100%;
   background-color: transparent;
   border: 0px solid;
-  color: white;
 }

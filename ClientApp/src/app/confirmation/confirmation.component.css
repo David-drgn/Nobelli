@@ -3,7 +3,7 @@
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  background: white;
+  background: var(--first-color);
   position: relative;
   gap: 15px;
 }

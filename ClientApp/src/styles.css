@@ -7,6 +7,56 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--back-color);
+}
+
+.mat-drawer-content{
+  background-color: var(--back-color);
+}
+
+body.ligth-mode {
+  --primary-color: #df9c73;
+  --second-color: #fde5dd;
+  --first-color: #1a1a1a;
+  --back-table-color: #efefef;
+  --back-color: white;
+  
+  color: #1a1a1a !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface{
+  background-color: transparent !important;
+}
+
+.mdc-list-item__primary-text{
+  color: #1a1a1a !important;
+}
+
+body.dark-mode {
+  --primary-color: #fde5dd;
+  --second-color: #df9c73;
+  --first-color: white;
+  --back-table-color: #3a3a3a;
+  --back-color: #3a3a3a;
+
+  color: white !important;
+}
+
+th {
+  color: var(--primary-color);
+}
+
+td {
+  color: var(--first-color);
+  border-bottom: 1px solid var(--primary-color);
+}
+
+button, mat-icon {
+  color: var(--primary-color);
+}
+
+.container{
+  background-color: var(--back-color);
 }
 
 :root {
@@ -30,6 +80,7 @@ body {
 * {
   font-size: var(--text-font-size);
   letter-spacing: 1px;
+  color: var(--first-color);
 }
 
 /* Barra de rolagem */
@@ -45,7 +96,7 @@ body {
 
 /* Thumb (parte que você arrasta) */
 *::-webkit-scrollbar-thumb {
-  background: #df9c73;
+  background: var(--primary-color);
   border-radius: 10px;
 }
 
@@ -54,11 +105,14 @@ textarea:focus-visible {
   outline: none;
 }
 
+input, textarea{
+  color: #1a1a1a;
+}
+
 textarea {
   width: 100%;
   height: 150px;
   resize: none;
-  background-color: #efefef;
   border: 0px;
   border-radius: 10px;
   padding: 5px;
@@ -78,8 +132,12 @@ textarea {
   height: auto !important;
 }
 
+.fc{
+  background-color: var(--back-color);
+}
+
 .fc .fc-daygrid-day.fc-day-today {
-  background-color: #df9c73 !important;
+  background-color: var(--primary-color) !important;
 }
 
 .fc-h-event .fc-event-title-container,
@@ -90,11 +148,11 @@ textarea {
 
 .fc-h-event .fc-event-title-container:hover,
 .fc .fc-daygrid-day-frame:hover {
-  background-color: #fde5dd;
+  background-color: var(--second-color);
 }
 
 .fc .fc-highlight {
-  background-color: #df9c73;
+  background-color: var(--second-color);
 }
 
 .fc-today-button .fc-button .fc-button-primary {
@@ -102,24 +160,32 @@ textarea {
 }
 
 .fc .fc-button-primary {
-  background-color: #df9c73;
-  border-color: #fde5dd;
+  background-color: var(--primary-color);
+  border-color: var(--second-color);
+
+  span{
+    color: var(--second-color) !important;
+  }
 }
 
 .fc .fc-button-primary:hover {
-  background-color: #fde5dd;
-  border-color: #df9c73;
-  color: #df9c73;
+  background-color: var(--second-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .fc .fc-button-primary:disabled {
-  background-color: #fde5dd;
-  border-color: #fde5dd;
+  background-color: var(--second-color);
+  border-color: var(--second-color);
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fc .fc-button-primary:not(:disabled):active {
-  background-color: #df9c73;
+  background-color: var(--primary-color);
+}
+
+.fc-view-button{
+  color: var(--second-color) !important;
 }
 
 .fc .fc-button-primary:focus {
@@ -148,7 +214,7 @@ textarea {
 
 .title {
   font-size: var(--subtitle-font-size);
-  color: #df9c73;
+  color: var(--primary-color);
   align-items: center;
   font-weight: 400;
   display: flex;
@@ -156,7 +222,7 @@ textarea {
 
 .mat-horizontal-stepper-header .mat-step-icon,
 .mat-vertical-stepper-header .mat-step-icon {
-  background-color: #df9c73;
+  background-color: var(--primary-color);
 }
 
 .mat-horizontal-stepper-content,
@@ -167,8 +233,8 @@ textarea {
 button {
   padding: 10px 50px;
   border: 0px;
-  background-color: #df9c73;
-  color: #fde5dd;
+  background-color: var(--primary-color);
+  color: var(--second-color);
   border-radius: 20px;
   cursor: pointer;
   transition: all 1s;
@@ -182,13 +248,17 @@ button:hover {
   width: 100% !important;
 }
 
+.mat-stepper-vertical, .mat-stepper-horizontal{
+  background-color: transparent !important;
+}
+
 input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid #df9c73;
+  border: 2px solid var(--primary-color);
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -196,14 +266,14 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-  background-color: #df9c73;
-  border-color: #df9c73;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 input[type="checkbox"]:checked::after {
   content: "✔";
   font-size: 16px;
-  color: white;
+  color: var(--first-color);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -211,8 +281,8 @@ input[type="checkbox"]:checked::after {
 }
 
 input[type="checkbox"]:disabled {
-  background-color: #fde5dd;
-  border-color: #fde5dd;
+  background-color: var(--second-color);
+  border-color: var(--second-color);
   cursor: no-drop;
 }
 
@@ -230,9 +300,9 @@ input[type="checkbox"]:disabled {
 
   mat-icon {
     font-size: 30px;
-    background-color: #df9c73;
+    background-color: var(--primary-color);
     z-index: 1;
-    color: #fde5dd !important;
+    color: var(--second-color) !important;
   }
 
   :is(span) {
@@ -257,4 +327,52 @@ input[type="checkbox"]:disabled {
     left: 0%;
     opacity: 1;
   }
+}
+
+mat-select {
+  height: 41px;
+  border-radius: 10px;
+  align-items: center;
+  background: var(--second-color);
+  display: flex;
+  box-sizing: border-box;
+}
+
+.mat-mdc-select-trigger {
+  height: 100% !important;
+  padding: 10px;
+}
+
+.mat-mdc-select-min-line {
+  color: var(--first-color) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mdc-list-item__primary-text {
+  color: var(--primary-color) !important;
+}
+
+mat-pseudo-checkbox {
+  display: none !important;
+}
+
+.mdc-list-item__primary-text:first-of-type {
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+.mdc-list-item__primary-text:first-of-type > input {
+  width: 100%;
+  border: 0px;
+  height: 40px;
+  padding-left: 17px;
+}
+
+.mat-mdc-select-panel .mat-mdc-option:first-child {
+  padding: 0px !important;
+}
+
+.mat-step-text-label{
+  color: var(--first-color);
 }

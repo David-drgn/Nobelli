@@ -1,1 +1,3 @@
+<mat-icon class="user_theme" *ngIf="!theme" fontIcon="dark_mode" matTooltip="Alterar para o modo escuro" (click)="dark()"></mat-icon>
+<mat-icon class="user_theme" *ngIf="theme" fontIcon="light_mode" matTooltip="Alterar para o modo claro" (click)="ligth()"></mat-icon>
 <router-outlet></router-outlet>

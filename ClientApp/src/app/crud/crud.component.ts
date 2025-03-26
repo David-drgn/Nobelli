@@ -66,6 +66,22 @@ interface Service {
   styleUrls: ['./crud.component.css'],
 })
 export class CrudComponent {
+  searchText: string = '';
+
+  filter(items: any) {
+    if (this.searchText) {
+      return items.filter((e: any) => {
+        const nome = e.nome?.toLowerCase() || '';
+        const title = e.title?.toLowerCase() || '';
+
+        return (
+          nome.includes(this.searchText.toLowerCase()) ||
+          title.includes(this.searchText.toLowerCase())
+        );
+      });
+    } else return items;
+  }
+
   sections: Section[] = [];
 
   infoPrime: any = null;
@@ -891,10 +907,5 @@ export class CrudComponent {
   selecionarCliente(cliente: any) {
     console.log(cliente);
     this.bandInfo.idCliente = cliente.id;
-  }
-
-  fnder(e: any): string {
-    if (e) return this.infoClient.find((w: any) => w.id === e).nome;
-    else return '';
   }
 }

@@ -44,6 +44,12 @@
           <mat-icon fontIcon="description"></mat-icon>
           <span *ngIf="screenWidth > 600 ? !open : true">Excel</span>
         </div>
+        <div (click)="toggleDrawer()" routerLink="./chat" [style]="screenWidth > 600? open? 'width: auto' : '' : ''"
+          [class]="pathSelect == '/nobelli/chat'? 'item active' : 'item'"
+          [matTooltip]="screenWidth > 600? open? 'Chat': '' : ''">
+          <mat-icon fontIcon="forum"></mat-icon>
+          <span *ngIf="screenWidth > 600 ? !open : true">Chat Nobelli</span>
+        </div>
       </div>
       <div (click)="logout()" [style]="screenWidth > 600? open? 'width: auto' : '' : ''" class="item active"
         [matTooltip]="screenWidth > 600? open? 'Sair': '' : ''">
@@ -63,8 +69,6 @@
           matTooltip="Caso queira pesquisar mais de uma coisa, coloque uma vírgula antes da próxima palavra"
           (input)="search(inputSearch.value)" />
       </div>
-      <mat-icon fontIcon="forum" matTooltip="Chat bot Nobelli, pesquise por datas, clientes e resumos de seus produtos com a ajuda do seu chat personalizado" routerLink="./chat"
-        [class]="pathSelect == '/nobelli/chat'? 'iconHelpActive' : 'iconHelp'"></mat-icon>
     </div>
     <router-outlet></router-outlet>
   </mat-drawer-content>

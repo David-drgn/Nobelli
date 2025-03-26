@@ -6,6 +6,7 @@
   flex-direction: column;
   margin: auto;
   box-sizing: border-box;
+  background-color: var(--back-color);
   overflow: auto;
 }
 
@@ -16,8 +17,8 @@
 }
 
 .table_container .header_table {
-  background-color: #fde5dd;
-  color: #df9c73;
+  background-color: var(--second-color);
+  color: var(--primary-color);
   padding: 5px 20px;
   position: sticky;
   top: 0;
@@ -28,7 +29,7 @@
   top: 0;
   padding: 10px 20px;
   text-align: start;
-  border-left: 2px solid #df9c73;
+  border-left: 2px solid var(--primary-color);
 }
 
 .table_container .header_table th:first-child {
@@ -36,7 +37,7 @@
 }
 
 .table_container .body_table tr:nth-child(odd) {
-  background-color: #efefef; /* Cor clara */
+  background-color: var(--back-table-color); /* Cor clara */
 }
 
 .table_container .body_table tr:nth-child(even) {
@@ -50,14 +51,14 @@
 }
 
 .table_container .body_table tr.selected {
-  background-color: #fde5dd;
-  color: #df9c73;
+  background-color: var(--second-color);
+  color: var(--primary-color);
   font-weight: 600;
 }
 
 .table_container .body_table td {
   padding-left: 20px;
-  border-left: 2px solid #df9c73;
+  border-left: 2px solid var(--primary-color);
 }
 
 .table_container .body_table td.optionTd {
@@ -66,7 +67,7 @@
 }
 
 .table_container .body_table td:first-child {
-  border: none;
+  border-left: none;
 }
 
 .footer {
@@ -85,7 +86,7 @@
   border: none;
   padding: 10px;
   background-color: #df9d738c;
-  color: #fde5dd;
+  color: var(--second-color);
   font-weight: 600;
   border-radius: 100%;
   cursor: pointer;
@@ -96,6 +97,6 @@
 }
 
 mat-icon {
-  color: #df9c73;
+  color: var(--primary-color);
   cursor: pointer;
 }

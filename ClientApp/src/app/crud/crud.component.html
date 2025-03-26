@@ -440,20 +440,40 @@
                                 Cliente
                                 <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <select [(ngModel)]="bandInfo.idCliente">
+                            <!-- <select [(ngModel)]="bandInfo.idCliente">
                                 <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
                                     {{cliente.nome}}</option>
-                            </select>
+                            </select> -->
+                            <mat-select [(ngModel)]="bandInfo.idCliente">
+                                <mat-option>
+                                    <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                        (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                        (keydown.enter)="$event.stopPropagation()" />
+                                </mat-option>
+                                <mat-option *ngFor="let cliente of filter(infoClient)" [value]="cliente.id">
+                                    {{ cliente.nome }}
+                                </mat-option>
+                            </mat-select>
                         </div>
                         <div class="wrapper_input">
                             <span>
                                 Funcionário
                                 <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <select [(ngModel)]="bandInfo.idFuncionario">
+                            <!-- <select [(ngModel)]="bandInfo.idFuncionario">
                                 <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
                                     {{func.nome}}</option>
-                            </select>
+                            </select> -->
+                            <mat-select [(ngModel)]="bandInfo.idFuncionario">
+                                <mat-option>
+                                    <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                        (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                        (keydown.enter)="$event.stopPropagation()" />
+                                </mat-option>
+                                <mat-option *ngFor="let func of filter(infoFuncionario)" [value]="func.id">
+                                    {{ func.nome }}
+                                </mat-option>
+                            </mat-select>
                         </div>
                     </div>
                     <div class="wrapper_input">
@@ -472,16 +492,29 @@
                                 Produto
                             </span>
                             <div class="wrapper_input">
-                                <select [(ngModel)]="section.id">
-                                    <!-- <optgroup label="Produtos"> -->
-                                    <option *ngFor="let product of selectProduct(); let i = index" [value]="product.id">
-                                        {{product.title}}</option>
-                                    <!-- </optgroup> -->
-                                    <!-- <optgroup label="Servico">
+                                <mat-select [(ngModel)]="section.id">
+                                    <mat-option>
+                                        <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                            (click)="$event.stopPropagation()"
+                                            (keydown.space)="$event.stopPropagation()"
+                                            (keydown.enter)="$event.stopPropagation()" />
+                                    </mat-option>
+                                    <mat-option *ngFor="let product of filter(selectProduct()); let i = index"
+                                        [value]="product.id">
+                                        {{product.title}}
+                                    </mat-option>
+                                </mat-select>
+
+                                <!-- <select [(ngModel)]="section.id"> -->
+                                <!-- <optgroup label="Produtos"> -->
+                                <!-- <option *ngFor="let product of selectProduct(); let i = index" [value]="product.id"> -->
+                                <!-- {{product.title}}</option> -->
+                                <!-- </optgroup> -->
+                                <!-- <optgroup label="Servico">
                                         <option *ngFor="let service of selectService(); let i = index"
                                             [value]="service.id">{{service.title}}</option>
                                     </optgroup> -->
-                                </select>
+                                <!-- </select> -->
                             </div>
                         </div>
                         <div class="section_item">

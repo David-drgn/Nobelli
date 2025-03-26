@@ -7,7 +7,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class HighLigthPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
 
-  transform(value: any, search: string, color: string = '#df9c73'): SafeHtml {
+  transform(value: any, search: string, color: string = 'var(--primary-color)'): SafeHtml {
     if (value == null) return '';
     const stringValue = typeof value === 'string' ? value : String(value);
 

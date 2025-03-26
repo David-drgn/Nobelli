@@ -1,11 +1,10 @@
 .wrapper_alert {
   padding: 20px;
-  border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: var(--back-table-color);
   position: relative;
   width: 100%;
   height: 100dvh;
@@ -18,6 +17,7 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
+  background-color: transparent;
 }
 
 .container_crud {
@@ -40,12 +40,12 @@
     width: -webkit-fill-available;
     border-radius: 10px;
     border-color: transparent;
-    background-color: #efefef;
+    /* background-color: var(--back-table-color); */
     padding-left: 10px;
   }
   :is(span) {
     width: 100%;
-    color: #df9c73;
+    color: var(--primary-color);
     display: flex;
     align-items: center;
   }
@@ -74,13 +74,13 @@
 .add_product{
   padding: 5px;
   border-radius: 100%;
-  color: white;
-  background-color: #df9c73;
+  color: var(--first-color);
+  background-color: var(--primary-color);
   cursor: pointer;
 }
 
 .section {
-  border-left: #df9c73 5px solid;
+  border-left: var(--primary-color) 5px solid;
   border-radius: 5px;
   margin: 20px;
   display: flex;
@@ -89,8 +89,8 @@
   :is(mat-icon) {
     padding: 5px;
     border-radius: 100%;
-    background: #df9c73;
-    color: #fde5dd;
+    background: var(--primary-color);
+    color: var(--second-color);
     transition: all 1s;
     cursor: pointer;
     margin-left: 5px;
@@ -103,9 +103,9 @@
 .section_title {
   :is(input) {
     background-color: transparent !important;
-    border-bottom: 2px #df9c73 solid;
+    border-bottom: 2px var(--primary-color) solid;
     border-radius: 0px;
-    color: #df9c73;
+    color: var(--primary-color);
     font-size: var(--subtitle-font-size);
   }
 }
@@ -117,21 +117,23 @@
   align-items: center;
 }
 
-.excel_button {
-  padding: 10px;
-  font-size: 30px;
-  border-radius: 100%;
-  background: #df9d739e;
-  color: #fde5dd;
-  transition: all 1s;
-  cursor: pointer;
-  margin-left: 5px;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
+.autocomplete{
+  background-color: var(--second-color);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.excel_button:hover {
-  background: #df9c73;
-  padding: 7px;
+.autocomplete>button{
+  position: absolute;
+  background-color: transparent !important;
+  width: 100%;
+  padding: 0px;
+  color: var(--first-color);
+}
+
+.autocomplete_wrapper{
+  width: 100%;
 }
