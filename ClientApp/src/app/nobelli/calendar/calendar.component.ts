@@ -9,6 +9,7 @@ import { StorageServiceService } from 'src/app/services/storage/storage-service.
 import { debounceTime } from 'rxjs';
 import { AlertComponent } from 'src/app/alert/alert.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
@@ -67,19 +68,18 @@ export class CalendarComponent {
       //   },
       // });
     },
+    dateClick: (info) => {
+      console.table(info);
+      this.storage.infoSection.next(info);
+      this.router.navigate(['/nobelli/crud', 'event', 0]);
+    },
   };
 
   constructor(
     private storage: StorageServiceService,
-    private dialog: MatDialog
-  ) {
-    // this.storage.search.subscribe((searchText) => {
-    //   this.storage.load.next(true);
-    //   setTimeout(() => {
-    //     this.storage.load.next(false);
-    //   }, 1000);
-    // });
-  }
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngAfterViewInit() {
     if (this.calendar) {

@@ -10,7 +10,7 @@ body {
   background-color: var(--back-color);
 }
 
-.mat-drawer-content{
+.mat-drawer-content {
   background-color: var(--back-table-color);
 }
 
@@ -20,15 +20,15 @@ body.ligth-mode {
   --first-color: #1a1a1a;
   --back-table-color: #efefef;
   --back-color: white;
-  
+
   color: #1a1a1a !important;
 }
 
-.mat-mdc-dialog-container .mdc-dialog__surface{
+.mat-mdc-dialog-container .mdc-dialog__surface {
   background-color: transparent !important;
 }
 
-.mdc-list-item__primary-text{
+.mdc-list-item__primary-text {
   color: #1a1a1a !important;
 }
 
@@ -51,11 +51,12 @@ td {
   border-bottom: 1px solid var(--primary-color);
 }
 
-button, mat-icon {
+button,
+mat-icon {
   color: var(--primary-color);
 }
 
-.container{
+.container {
   background-color: var(--back-color);
 }
 
@@ -67,13 +68,16 @@ button, mat-icon {
   --text-font-size: clamp(1rem, 1.5vw, 1rem);
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
   :root {
     --title-font-size: clamp(1.5rem, 2vw, 2rem);
 
     --subtitle-font-size: clamp(1.2rem, 1.75vw, 1.75rem);
 
     --text-font-size: clamp(1rem, 1.5vw, 1rem);
+  }
+  .fc-view-button {
+    width: 100% !important;
   }
 }
 
@@ -105,7 +109,8 @@ textarea:focus-visible {
   outline: none;
 }
 
-input, textarea{
+input,
+textarea {
   color: #1a1a1a;
 }
 
@@ -132,7 +137,7 @@ textarea {
   height: auto !important;
 }
 
-.fc{
+.fc {
   background-color: var(--back-color);
 }
 
@@ -163,29 +168,35 @@ textarea {
   background-color: var(--primary-color);
   border-color: var(--second-color);
 
-  span{
+  span {
     color: var(--second-color) !important;
   }
 }
 
-.fc .fc-button-primary:hover {
+.fc .fc-button-primary:hover,
+.fc-view-button:hover {
   background-color: var(--second-color);
   border-color: var(--primary-color);
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
+  span {
+    color: var(--primary-color) !important;
+  }
 }
 
 .fc .fc-button-primary:disabled {
   background-color: var(--second-color);
   border-color: var(--second-color);
+  color: var(--primary-color);
+}
+
+.mat-mdc-optgroup-label {
+  font-style: italic;
+  font-weight: 700;
 }
 
 .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fc .fc-button-primary:not(:disabled):active {
   background-color: var(--primary-color);
-}
-
-.fc-view-button{
-  color: var(--second-color) !important;
 }
 
 .fc .fc-button-primary:focus {
@@ -248,7 +259,8 @@ button:hover {
   width: 100% !important;
 }
 
-.mat-stepper-vertical, .mat-stepper-horizontal{
+.mat-stepper-vertical,
+.mat-stepper-horizontal {
   background-color: transparent !important;
 }
 
@@ -374,6 +386,6 @@ mat-pseudo-checkbox {
   padding: 0px !important;
 }
 
-.mat-step-text-label{
+.mat-step-text-label {
   color: var(--first-color);
 }

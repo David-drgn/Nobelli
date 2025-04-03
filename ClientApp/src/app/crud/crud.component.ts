@@ -145,7 +145,7 @@ export class CrudComponent {
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
-    if (this.type?.includes('band')) {
+    if (this.type?.includes('band') || this.type?.includes('event')) {
       this.getSection();
       this.getClient();
       this.getFuncionario();
@@ -284,7 +284,11 @@ export class CrudComponent {
   getClient() {
     this.storage.load.next(true);
     this.http
-      .GET(`clienteGet${this.type == 'band' ? '' : `/${this.id}`}`)
+      .GET(
+        `clienteGet${
+          this.type == 'band' || this.type == 'event' ? '' : `/${this.id}`
+        }`
+      )
       .subscribe(
         (res: any) => {
           this.storage.load.next(false);
@@ -295,7 +299,7 @@ export class CrudComponent {
               1
             );
           else {
-            if (this.type == 'band') {
+            if (this.type == 'band' || this.type == 'event') {
               this.infoClient = res.data;
               return;
             }
@@ -336,7 +340,11 @@ export class CrudComponent {
   getFuncionario() {
     this.storage.load.next(true);
     this.http
-      .GET(`funcionarioGet${this.type == 'band' ? '' : `/${this.id}`}`)
+      .GET(
+        `funcionarioGet${
+          this.type == 'band' || this.type == 'event' ? '' : `/${this.id}`
+        }`
+      )
       .subscribe(
         (res: any) => {
           this.storage.load.next(false);
@@ -347,7 +355,7 @@ export class CrudComponent {
               1
             );
           else {
-            if (this.type == 'band') {
+            if (this.type == 'band' || this.type == 'event') {
               this.infoFuncionario = res.data;
               return;
             }
@@ -378,7 +386,7 @@ export class CrudComponent {
           this.type == 'estoque' ||
           this.type == 'service'
             ? `/${this.sectionId}`
-            : this.type == 'band'
+            : this.type == 'band' || this.type == 'event'
             ? ''
             : `/${this.id}`
         }`
@@ -393,6 +401,12 @@ export class CrudComponent {
               1
             );
           else {
+            if (this.type == 'event') {
+              this.infoPrime = res.data.filter(
+                (e: any) => e.tipo === 'servico'
+              );
+              console.table(this.infoPrime);
+            }
             if (this.type == 'band') {
               this.infoPrime = res.data;
               console.table(this.infoPrime);

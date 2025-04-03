@@ -18,6 +18,9 @@ export class StorageServiceService {
   load = new BehaviorSubject<boolean>(false);
 
   search = new BehaviorSubject<string>('');
+  infoSection = new BehaviorSubject<any>(null);
+  
+  theme = new BehaviorSubject<string | null>(null);
 
   chatHistory = new BehaviorSubject<Contents>({
     contents: [
@@ -38,6 +41,13 @@ export class StorageServiceService {
       value
         ? localStorage.setItem('token', value)
         : localStorage.removeItem('token');
+    });
+
+    this.theme.next(localStorage.getItem('theme'));
+    this.theme.subscribe((value) => {
+      value
+        ? localStorage.setItem('theme', value)
+        : localStorage.removeItem('theme');
     });
   }
 }

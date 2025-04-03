@@ -631,3 +631,190 @@
         </div>
     </div>
 </div>
+
+<div class="wrapper_alert" *ngIf="type == 'event'">
+    <div class="container_crud">
+        <span class="title">Adicione os dados da seção</span>
+        <div class="container">
+            <mat-stepper [linear]="false" #stepper animationDuration="1000">
+                <mat-step>
+                    <ng-template matStepLabel>Dados iniciais</ng-template>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Cliente
+                                <mat-icon fontIcon="person"></mat-icon>
+                            </span>
+                            <!-- <select [(ngModel)]="bandInfo.idCliente">
+                                <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
+                                    {{cliente.nome}}</option>
+                            </select> -->
+                            <mat-select [(ngModel)]="bandInfo.idCliente">
+                                <mat-option>
+                                    <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                        (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                        (keydown.enter)="$event.stopPropagation()" />
+                                </mat-option>
+                                <mat-option *ngFor="let cliente of filter(infoClient)" [value]="cliente.id">
+                                    {{ cliente.nome }}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Funcionário
+                                <mat-icon fontIcon="person"></mat-icon>
+                            </span>
+                            <!-- <select [(ngModel)]="bandInfo.idFuncionario">
+                                <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
+                                    {{func.nome}}</option>
+                            </select> -->
+                            <mat-select [(ngModel)]="bandInfo.idFuncionario">
+                                <mat-option>
+                                    <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                        (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                        (keydown.enter)="$event.stopPropagation()" />
+                                </mat-option>
+                                <mat-option *ngFor="let func of filter(infoFuncionario)" [value]="func.id">
+                                    {{ func.nome }}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Serviço
+                            <mat-icon fontIcon="person"></mat-icon>
+                        </span>
+                        <mat-select [(ngModel)]="bandInfo.idFuncionario">
+                            <mat-option>
+                                <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                    (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                    (keydown.enter)="$event.stopPropagation()" />
+                            </mat-option>
+                            <mat-optgroup [label]="section.title" *ngFor="let section of infoPrime">
+                                    <mat-option  *ngFor="let serv of filter(section.servico)">{{serv.title}}</mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                    </div>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Data e Hora de Início
+                                <mat-icon fontIcon="calendar_month"></mat-icon>
+                            </span>
+                            <input type="datetime-local">
+                        </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Data e Hora de Término
+                                <mat-icon fontIcon="calendar_month"></mat-icon>
+                            </span>
+                            <input type="datetime-local">
+                        </div>
+                    </div>
+                    <div class="wrapper_input_check">
+                        <input type="checkbox">
+                        <span>
+                            O procedimento será realizado toda semana?
+                        </span>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Valores</ng-template>
+                    
+                    <div class="wrapper_input">
+                        <span>
+                            Valor Total Calculado
+                            <mat-icon fontIcon="payments"></mat-icon>
+                        </span>
+                        <span>R${{totalValor()}}</span>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Concluir</ng-template>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Cliente
+                                <mat-icon fontIcon="person"></mat-icon>
+                            </span>
+                            <select [(ngModel)]="bandInfo.idCliente" disabled>
+                                <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
+                                    {{cliente.nome}}</option>
+                            </select>
+                        </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Funcionário
+                                <mat-icon fontIcon="person"></mat-icon>
+                            </span>
+                            <select [(ngModel)]="bandInfo.idFuncionario" disabled>
+                                <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
+                                    {{func.nome}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Datas e Hora
+                            <mat-icon fontIcon="calendar_month"></mat-icon>
+                        </span>
+                        <input type="datetime-local" [(ngModel)]="bandInfo.data" disabled>
+                    </div>
+                    <div class="section" *ngFor="let section of bandInfo.produtos; let i = index">
+                        <div class="wrapper_input section_title">
+                            <span>
+                                Produto
+                            </span>
+                            <div class="wrapper_input">
+                                <select [(ngModel)]="section.id" disabled>
+                                    <!-- <optgroup label="Produtos"> -->
+                                    <option *ngFor="let product of selectProduct(); let i = index" [value]="product.id">
+                                        {{product.title}}</option>
+                                    <!-- </optgroup> -->
+                                    <!-- <optgroup label="Servico">
+                                        <option *ngFor="let service of selectService(); let i = index"
+                                            [value]="service.id">{{service.title}}</option>
+                                    </optgroup> -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="section_item">
+                            <div class="wrapper_input">
+                                <span>
+                                    Quantidade [ Valor unitário: {{unitValue(section.id)}} ]
+                                </span>
+                                <input type="number" [(ngModel)]="section.quantidade" min="1" disabled>
+                            </div>
+                            <div class="wrapper_input">
+                                <span>
+                                    Valor Total
+                                </span>
+                                <input type="number" step="0.01" min="0.01" [value]="section.valor * section.quantidade"
+                                    disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper_input">
+                        <span>
+                            Valor Total Calculado
+                            <mat-icon fontIcon="payments"></mat-icon>
+                        </span>
+                        <span>R${{totalValor()}}</span>
+                    </div>
+                    <button (click)="vendaCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
+                </mat-step>
+
+                <ng-template matStepperIcon="done">
+                    <mat-icon>radio_button_unchecked</mat-icon>
+                </ng-template>
+
+                <ng-template matStepperIcon="edit">
+                    <mat-icon>radio_button_unchecked</mat-icon>
+                </ng-template>
+
+            </mat-stepper>
+        </div>
+    </div>
+</div>
