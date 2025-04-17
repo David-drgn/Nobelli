@@ -397,6 +397,58 @@ app.post("/api/bandInsert", async (req, res) => {
   }
 });
 
+app.post("/api/eventInsert", async (req, res) => {
+  const {
+    token,
+    cliente_id,
+    funcionario_id,
+    servico_id,
+    horarioInicio,
+    datainicio,
+    datafim,
+    semanal,
+    descricao,
+    horarioTermino,
+  } = req.body;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    const clienteData = {
+      cliente_id: !cliente_id ? null : cliente_id,
+      funcionario_id: !funcionario_id ? null : funcionario_id,
+      servico_id: !servico_id ? null : servico_id,
+      horarioInicio: !horarioInicio ? null : horarioInicio,
+      datainicio: !datainicio ? null : datainicio,
+      datafim: !datafim ? datainicio : datafim,
+      semanal: !semanal ? null : semanal,
+      descricao: !descricao ? null : descricao,
+      horarioTermino: !horarioTermino ? null : horarioTermino,
+    };
+
+    const { data, error } = await supabase
+      .from("eventos")
+      .insert([clienteData])
+      .select();
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      mensagem: "Conexão realizada com sucesso",
+      dados: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
+
 //Delete
 
 app.post("/api/clienteDelete", async (req, res) => {
@@ -815,6 +867,34 @@ app.post("/api/bandUpdate", async (req, res) => {
 });
 
 //Getters
+
+app.get("/api/eventGet/:token", async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    var decoded = tokenVerify(token);
+
+    if (decoded.erro) throw "Erro ao decodificar o token";
+
+    let { data, error } = await supabase
+      .from("eventos")
+      .select("*, cliente(*), funcionario(*), servico(*)")
+      .order("datainicio", { ascending: true });
+
+    if (error) throw error;
+
+    res.status(200).json({
+      erro: false,
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      erro: true,
+      mensagem: "Erro ao conectar com Supabase",
+      detalhes: error.message,
+    });
+  }
+});
 
 app.get("/api/clienteGet/:token", async (req, res) => {
   const { token } = req.params;

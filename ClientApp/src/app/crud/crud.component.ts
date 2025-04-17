@@ -53,6 +53,19 @@ interface Produto {
   qtd: number;
 }
 
+interface Event {
+  descricao: string;
+  idCliente: string;
+  idFuncionario: string;
+  idServico: string;
+  horarioInicio: string;
+  horarioFim: string;
+  dataIniciar: string;
+  dataFinal: string;
+  semanal: [];
+  sem: boolean;
+}
+
 interface Service {
   title: string;
   descricao: string;
@@ -68,7 +81,8 @@ interface Service {
 export class CrudComponent {
   searchText: string = '';
 
-  filter(items: any) {
+  filter(items: any, campo: string) {
+    if (this.campoEmFoco !== campo || !this.searchText) return items;
     if (this.searchText) {
       return items.filter((e: any) => {
         const nome = e.nome?.toLowerCase() || '';
@@ -79,7 +93,12 @@ export class CrudComponent {
           title.includes(this.searchText.toLowerCase())
         );
       });
-    } else return items;
+    }
+  }
+
+  campoEmFoco: string = '';
+  onFocus(campo: string) {
+    this.campoEmFoco = campo;
   }
 
   sections: Section[] = [];
@@ -132,6 +151,19 @@ export class CrudComponent {
     duracao: '',
   };
 
+  event: Event = {
+    descricao: '',
+    idCliente: '',
+    idFuncionario: '',
+    idServico: '',
+    horarioInicio: '',
+    horarioFim: '',
+    dataIniciar: '',
+    dataFinal: '',
+    semanal: [],
+    sem: false,
+  };
+
   type: string | null;
   sectionType: string | null = null;
   sectionId: string | null = null;
@@ -149,6 +181,22 @@ export class CrudComponent {
       this.getSection();
       this.getClient();
       this.getFuncionario();
+      if (this.type?.includes('event')) {
+        this.event.dataIniciar = this.storage.infoSection
+          .getValue()
+          .dateStr.includes('T')
+          ? this.storage.infoSection.getValue().dateStr.split('T')[0]
+          : this.storage.infoSection.getValue().dateStr;
+
+        this.event.horarioInicio = this.storage.infoSection
+          .getValue()
+          .dateStr.includes('T')
+          ? this.storage.infoSection
+              .getValue()
+              .dateStr.split('T')[1]
+              .split('-')[0]
+          : '';
+      }
     }
     if (this.type?.includes('section')) {
       this.sectionType = this.type.split('@')[1];
@@ -279,6 +327,46 @@ export class CrudComponent {
         status,
       },
     });
+  }
+
+  viewFinalDateTime() {
+    if (!this.event.idServico) {
+      this.openDialog(
+        'Data e hora de término',
+        'A data e hora de término depende do tempo especulado no serviço... Por favor, defina o serviço'
+      );
+    } else {
+      let servicoSection = this.infoPrime.find((e: any) =>
+        e.servico.find((j: any) => j.id === this.event.idServico)
+      );
+
+      let servico = servicoSection.servico.find(
+        (j: any) => j.id === this.event.idServico
+      );
+
+      console.log(servico);
+      console.log(this.event.horarioInicio);
+
+      this.event.horarioFim = this.somarHoras(
+        this.event.horarioInicio,
+        servico.duracao
+      );
+    }
+  }
+
+  somarHoras(horaInicial: string, duracao: string): string {
+    const [h1, m1] = horaInicial.split(':').map(Number);
+    const [h2, m2] = duracao.split(':').map(Number);
+
+    let totalMin = m1 + m2;
+    let totalHora = h1 + h2 + Math.floor(totalMin / 60);
+    totalMin = totalMin % 60;
+    totalHora = totalHora % 24; // pra manter no ciclo de 24h
+
+    const horaFinal = totalHora.toString().padStart(2, '0');
+    const minFinal = totalMin.toString().padStart(2, '0');
+
+    return `${horaFinal}:${minFinal}`;
   }
 
   getClient() {
@@ -524,6 +612,93 @@ export class CrudComponent {
         this.storage.load.next(false);
       }
     );
+  }
+
+  eventCrud() {
+    if (!this.event.idCliente) {
+      this.openDialog('Ops!', 'Por favor, preencha o nome do cliente', 2);
+      return;
+    }
+    if (!this.event.idFuncionario) {
+      this.openDialog('Ops!', 'Por favor, preencha o nome do funcionário', 2);
+      return;
+    }
+    if (!this.event.dataIniciar) {
+      this.openDialog('Ops!', 'Por favor, preencha a data de início', 2);
+      return;
+    }
+    if (!this.event.horarioInicio) {
+      this.openDialog('Ops!', 'Por favor, preencha a hora de início', 2);
+      return;
+    }
+    if (!this.event.idServico) {
+      this.openDialog('Ops!', 'Por favor, preencha o nome do serviço', 2);
+      return;
+    }
+    if (this.event.sem && this.event.semanal.length == 0) {
+      this.openDialog(
+        'Ops!',
+        'Por favor, preencha os dias da semana que o cliente se encontra na clínica',
+        2
+      );
+      return;
+    }
+    if (this.event.sem && this.event.dataFinal.length == 0) {
+      this.openDialog(
+        'Ops!',
+        'Por favor, preencha a data da última seção que será realizada pelo cliente',
+        2
+      );
+      return;
+    }
+
+    this.http
+      .POST(this.id == '0' ? 'eventInsert' : 'eventUpdate', {
+        cliente_id: this.event.idCliente,
+        funcionario_id: this.event.idFuncionario,
+        servico_id: this.event.idServico,
+        horarioInicio: this.event.horarioInicio,
+        datainicio: this.event.dataIniciar,
+        datafim: this.event.dataFinal,
+        semanal: this.event.semanal,
+        descricao: this.event.descricao,
+        horarioTermino: this.event.horarioFim,
+        id: this.id,
+      })
+      .subscribe(
+        (res) => {
+          this.storage.load.next(false);
+          if (res.erro)
+            this.openDialog(
+              'Opss!',
+              this.id == '0'
+                ? 'Ocorreu um erro ao cadastrar o evento, tente novamente mais tarde'
+                : 'Ocorreu um erro ao atualizar os dados do evento, tente novamente daqui a pouco',
+              1
+            );
+          else {
+            this.openDialog(
+              'Sucesso!',
+              this.id == '0'
+                ? 'Seu evento foi cadastrado com sucesso'
+                : 'Os dados do seu evento foram atualizados com sucesso',
+              2
+            );
+            window.history.back();
+          }
+        },
+        (erro) => {
+          this.storage.load.next(false);
+          console.error(erro);
+          this.openDialog(
+            'Opss!',
+            this.id == '0'
+              ? 'Ocorreu um erro ao cadastrar o evento, tente novamente mais tarde'
+              : 'Ocorreu um erro ao atualizar os dados do evento, tente novamente daqui a pouco',
+            1
+          );
+        }
+      );
   }
 
   clientCrud() {

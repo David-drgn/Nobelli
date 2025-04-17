@@ -26,6 +26,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/list": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "date-fns": "^4.1.0",
     "ngx-mask": "^17.0.0",
     "rxjs": "~7.8.0",
     "text-mask-addons": "^3.8.0",

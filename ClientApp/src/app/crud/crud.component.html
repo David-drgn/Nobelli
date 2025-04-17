@@ -444,13 +444,13 @@
                                 <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
                                     {{cliente.nome}}</option>
                             </select> -->
-                            <mat-select [(ngModel)]="bandInfo.idCliente">
+                            <mat-select [(ngModel)]="bandInfo.idCliente" (focus)="onFocus('cliente')">
                                 <mat-option>
                                     <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
                                         (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
                                         (keydown.enter)="$event.stopPropagation()" />
                                 </mat-option>
-                                <mat-option *ngFor="let cliente of filter(infoClient)" [value]="cliente.id">
+                                <mat-option *ngFor="let cliente of filter(infoClient, 'cliente')" [value]="cliente.id">
                                     {{ cliente.nome }}
                                 </mat-option>
                             </mat-select>
@@ -464,13 +464,14 @@
                                 <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
                                     {{func.nome}}</option>
                             </select> -->
-                            <mat-select [(ngModel)]="bandInfo.idFuncionario">
+                            <mat-select [(ngModel)]="bandInfo.idFuncionario" (focus)="onFocus('funcionario')">
                                 <mat-option>
                                     <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
                                         (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
                                         (keydown.enter)="$event.stopPropagation()" />
                                 </mat-option>
-                                <mat-option *ngFor="let func of filter(infoFuncionario)" [value]="func.id">
+                                <mat-option *ngFor="let func of filter(infoFuncionario, 'funcionario')"
+                                    [value]="func.id">
                                     {{ func.nome }}
                                 </mat-option>
                             </mat-select>
@@ -492,14 +493,15 @@
                                 Produto
                             </span>
                             <div class="wrapper_input">
-                                <mat-select [(ngModel)]="section.id">
+                                <mat-select [(ngModel)]="section.id" (focus)="onFocus('produto')">
                                     <mat-option>
                                         <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
                                             (click)="$event.stopPropagation()"
                                             (keydown.space)="$event.stopPropagation()"
                                             (keydown.enter)="$event.stopPropagation()" />
                                     </mat-option>
-                                    <mat-option *ngFor="let product of filter(selectProduct()); let i = index"
+                                    <mat-option
+                                        *ngFor="let product of filter(selectProduct(), 'produto'); let i = index"
                                         [value]="product.id">
                                         {{product.title}}
                                     </mat-option>
@@ -649,13 +651,13 @@
                                 <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
                                     {{cliente.nome}}</option>
                             </select> -->
-                            <mat-select [(ngModel)]="bandInfo.idCliente">
+                            <mat-select [(ngModel)]="event.idCliente" (focus)="onFocus('cliente')">
                                 <mat-option>
                                     <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
                                         (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
                                         (keydown.enter)="$event.stopPropagation()" />
                                 </mat-option>
-                                <mat-option *ngFor="let cliente of filter(infoClient)" [value]="cliente.id">
+                                <mat-option *ngFor="let cliente of filter(infoClient, 'cliente')" [value]="cliente.id">
                                     {{ cliente.nome }}
                                 </mat-option>
                             </mat-select>
@@ -669,13 +671,14 @@
                                 <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
                                     {{func.nome}}</option>
                             </select> -->
-                            <mat-select [(ngModel)]="bandInfo.idFuncionario">
+                            <mat-select [(ngModel)]="event.idFuncionario" (focus)="onFocus('funcionario')">
                                 <mat-option>
                                     <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
                                         (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
                                         (keydown.enter)="$event.stopPropagation()" />
                                 </mat-option>
-                                <mat-option *ngFor="let func of filter(infoFuncionario)" [value]="func.id">
+                                <mat-option *ngFor="let func of filter(infoFuncionario, 'funcionario')"
+                                    [value]="func.id">
                                     {{ func.nome }}
                                 </mat-option>
                             </mat-select>
@@ -686,49 +689,77 @@
                             Serviço
                             <mat-icon fontIcon="person"></mat-icon>
                         </span>
-                        <mat-select [(ngModel)]="bandInfo.idFuncionario">
+                        <mat-select [(ngModel)]="event.idServico" (focus)="onFocus('servico')"
+                            (selectionChange)="viewFinalDateTime()">
                             <mat-option>
                                 <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
                                     (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
                                     (keydown.enter)="$event.stopPropagation()" />
                             </mat-option>
                             <mat-optgroup [label]="section.title" *ngFor="let section of infoPrime">
-                                    <mat-option  *ngFor="let serv of filter(section.servico)">{{serv.title}}</mat-option>
+                                <mat-option *ngFor="let serv of filter(section.servico, 'servico')"
+                                    [value]="serv.id">{{serv.title}}</mat-option>
                             </mat-optgroup>
                         </mat-select>
                     </div>
                     <div class="two_camps">
                         <div class="wrapper_input">
                             <span>
-                                Data e Hora de Início
+                                Data de Início
                                 <mat-icon fontIcon="calendar_month"></mat-icon>
                             </span>
-                            <input type="datetime-local">
+                            <input type="date" [(ngModel)]="event.dataIniciar">
                         </div>
                         <div class="wrapper_input">
                             <span>
-                                Data e Hora de Término
+                                Data de Término
                                 <mat-icon fontIcon="calendar_month"></mat-icon>
                             </span>
-                            <input type="datetime-local">
+                            <input type="date" [disabled]="!event.sem" [(ngModel)]="event.dataFinal">
+                        </div>
+                    </div>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Horário de Início
+                                <mat-icon fontIcon="schedule"></mat-icon>
+                            </span>
+                            <input type="time" [(ngModel)]="event.horarioInicio" (change)="viewFinalDateTime()">
+                        </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Horário de Término
+                                <mat-icon fontIcon="schedule"></mat-icon>
+                            </span>
+                            <input type="time" disabled [(ngModel)]="event.horarioFim">
                         </div>
                     </div>
                     <div class="wrapper_input_check">
-                        <input type="checkbox">
+                        <input type="checkbox" [(ngModel)]="event.sem">
                         <span>
                             O procedimento será realizado toda semana?
                         </span>
                     </div>
-                </mat-step>
-                <mat-step>
-                    <ng-template matStepLabel>Valores</ng-template>
-                    
+                    <div class="wrapper_input" *ngIf="event.sem">
+                        <span>Dias da semana que serão realizados os procedimentos</span>
+                        <mat-select [(ngModel)]="event.semanal" multiple>
+                            <mat-optgroup label="Dias da semana">
+                                <mat-option value="Domingo">Domingo</mat-option>
+                                <mat-option value="Segunda">Segunda</mat-option>
+                                <mat-option value="Terça">Terça</mat-option>
+                                <mat-option value="Quarta">Quarta</mat-option>
+                                <mat-option value="Quinta">Quinta</mat-option>
+                                <mat-option value="Sexta">Sexta</mat-option>
+                                <mat-option value="Sábado">Sábado</mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                    </div>
                     <div class="wrapper_input">
                         <span>
-                            Valor Total Calculado
-                            <mat-icon fontIcon="payments"></mat-icon>
+                            Descrição
+                            <mat-icon fontIcon="inbox_text"></mat-icon>
                         </span>
-                        <span>R${{totalValor()}}</span>
+                        <textarea [(ngModel)]="service.descricao"></textarea>
                     </div>
                 </mat-step>
                 <mat-step>
@@ -739,71 +770,122 @@
                                 Cliente
                                 <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <select [(ngModel)]="bandInfo.idCliente" disabled>
+                            <!-- <select [(ngModel)]="bandInfo.idCliente">
                                 <option [value]="cliente.id" *ngFor="let cliente of infoClient; let i = index" value="">
                                     {{cliente.nome}}</option>
-                            </select>
+                            </select> -->
+                            <mat-select disabled [(ngModel)]="event.idCliente" (focus)="onFocus('cliente')">
+                                <mat-option>
+                                    <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                        (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                        (keydown.enter)="$event.stopPropagation()" />
+                                </mat-option>
+                                <mat-option *ngFor="let cliente of filter(infoClient, 'cliente')" [value]="cliente.id">
+                                    {{ cliente.nome }}
+                                </mat-option>
+                            </mat-select>
                         </div>
                         <div class="wrapper_input">
                             <span>
                                 Funcionário
                                 <mat-icon fontIcon="person"></mat-icon>
                             </span>
-                            <select [(ngModel)]="bandInfo.idFuncionario" disabled>
+                            <!-- <select [(ngModel)]="bandInfo.idFuncionario">
                                 <option [value]="func.id" *ngFor="let func of infoFuncionario; let i = index" value="">
                                     {{func.nome}}</option>
-                            </select>
+                            </select> -->
+                            <mat-select disabled [(ngModel)]="event.idFuncionario" (focus)="onFocus('funcionario')">
+                                <mat-option>
+                                    <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                        (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                        (keydown.enter)="$event.stopPropagation()" />
+                                </mat-option>
+                                <mat-option *ngFor="let func of filter(infoFuncionario, 'funcionario')"
+                                    [value]="func.id">
+                                    {{ func.nome }}
+                                </mat-option>
+                            </mat-select>
                         </div>
                     </div>
                     <div class="wrapper_input">
                         <span>
-                            Datas e Hora
-                            <mat-icon fontIcon="calendar_month"></mat-icon>
+                            Serviço
+                            <mat-icon fontIcon="person"></mat-icon>
                         </span>
-                        <input type="datetime-local" [(ngModel)]="bandInfo.data" disabled>
+                        <mat-select disabled [(ngModel)]="event.idServico" (focus)="onFocus('servico')"
+                            (selectionChange)="viewFinalDateTime()">
+                            <mat-option>
+                                <input matInput [(ngModel)]="searchText" placeholder="Pesquisar..."
+                                    (click)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()"
+                                    (keydown.enter)="$event.stopPropagation()" />
+                            </mat-option>
+                            <mat-optgroup [label]="section.title" *ngFor="let section of infoPrime">
+                                <mat-option *ngFor="let serv of filter(section.servico, 'servico')"
+                                    [value]="serv.id">{{serv.title}}</mat-option>
+                            </mat-optgroup>
+                        </mat-select>
                     </div>
-                    <div class="section" *ngFor="let section of bandInfo.produtos; let i = index">
-                        <div class="wrapper_input section_title">
+                    <div class="two_camps">
+                        <div class="wrapper_input">
                             <span>
-                                Produto
+                                Data de Início
+                                <mat-icon fontIcon="calendar_month"></mat-icon>
                             </span>
-                            <div class="wrapper_input">
-                                <select [(ngModel)]="section.id" disabled>
-                                    <!-- <optgroup label="Produtos"> -->
-                                    <option *ngFor="let product of selectProduct(); let i = index" [value]="product.id">
-                                        {{product.title}}</option>
-                                    <!-- </optgroup> -->
-                                    <!-- <optgroup label="Servico">
-                                        <option *ngFor="let service of selectService(); let i = index"
-                                            [value]="service.id">{{service.title}}</option>
-                                    </optgroup> -->
-                                </select>
-                            </div>
+                            <input type="date" disabled [(ngModel)]="event.dataIniciar">
                         </div>
-                        <div class="section_item">
-                            <div class="wrapper_input">
-                                <span>
-                                    Quantidade [ Valor unitário: {{unitValue(section.id)}} ]
-                                </span>
-                                <input type="number" [(ngModel)]="section.quantidade" min="1" disabled>
-                            </div>
-                            <div class="wrapper_input">
-                                <span>
-                                    Valor Total
-                                </span>
-                                <input type="number" step="0.01" min="0.01" [value]="section.valor * section.quantidade"
-                                    disabled>
-                            </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Data de Término
+                                <mat-icon fontIcon="calendar_month"></mat-icon>
+                            </span>
+                            <input type="date" disabled [(ngModel)]="event.dataFinal">
                         </div>
+                    </div>
+                    <div class="two_camps">
+                        <div class="wrapper_input">
+                            <span>
+                                Horário de Início
+                                <mat-icon fontIcon="schedule"></mat-icon>
+                            </span>
+                            <input type="time" disabled [(ngModel)]="event.horarioInicio"
+                                (change)="viewFinalDateTime()">
+                        </div>
+                        <div class="wrapper_input">
+                            <span>
+                                Horário de Término
+                                <mat-icon fontIcon="schedule"></mat-icon>
+                            </span>
+                            <input type="time" disabled [(ngModel)]="event.horarioFim">
+                        </div>
+                    </div>
+                    <div class="wrapper_input_check">
+                        <input type="checkbox" [(ngModel)]="event.sem" disabled>
+                        <span>
+                            O procedimento será realizado toda semana?
+                        </span>
+                    </div>
+                    <div class="wrapper_input" *ngIf="event.sem">
+                        <span>Dias da semana que serão realizados os procedimentos</span>
+                        <mat-select [(ngModel)]="event.semanal" multiple disabled>
+                            <mat-optgroup label="Dias da semana">
+                                <mat-option value="Domingo">Domingo</mat-option>
+                                <mat-option value="Segunda">Segunda</mat-option>
+                                <mat-option value="Terça">Terça</mat-option>
+                                <mat-option value="Quarta">Quarta</mat-option>
+                                <mat-option value="Quinta">Quinta</mat-option>
+                                <mat-option value="Sexta">Sexta</mat-option>
+                                <mat-option value="Sábado">Sábado</mat-option>
+                            </mat-optgroup>
+                        </mat-select>
                     </div>
                     <div class="wrapper_input">
                         <span>
-                            Valor Total Calculado
-                            <mat-icon fontIcon="payments"></mat-icon>
+                            Descrição
+                            <mat-icon fontIcon="inbox_text"></mat-icon>
                         </span>
-                        <span>R${{totalValor()}}</span>
+                        <textarea [(ngModel)]="service.descricao" disabled></textarea>
                     </div>
-                    <button (click)="vendaCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
+                    <button (click)="eventCrud()">{{id == '0'? 'Realizar cadastro' : 'Atualizar os dados'}}</button>
                 </mat-step>
 
                 <ng-template matStepperIcon="done">

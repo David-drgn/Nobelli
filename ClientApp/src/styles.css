@@ -137,12 +137,34 @@ textarea {
   height: auto !important;
 }
 
+.fc-daygrid-event-dot {
+  border-color: var(--primary-color) !important;
+}
+
+.fc-daygrid-event-harness{
+  background-color: var(--second-color) !important;
+}
+
+.fc-event-time {
+  display: none !important;
+}
+
+.fc-event-title {
+  font-weight: unset !important;
+  font-size: small !important;
+}
+
 .fc {
   background-color: var(--back-color);
 }
 
 .fc .fc-daygrid-day.fc-day-today {
   background-color: var(--primary-color) !important;
+}
+
+.fc-h-event {
+  background-color: var(--second-color) !important;
+  border: 0px solid !important;
 }
 
 .fc-h-event .fc-event-title-container,
