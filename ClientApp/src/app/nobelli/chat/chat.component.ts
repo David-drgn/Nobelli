@@ -8,9 +8,15 @@ interface Contents {
   contents: ChatMessage[];
 }
 
+interface Files {
+  data: string;
+  mimeType: string;
+  name: string;
+}
+
 interface ChatMessage {
   role: 'user' | 'model';
-  parts: { text: string }[];
+  parts: { text?: string; inlineData?: Files }[];
 }
 
 @Component({
@@ -20,6 +26,7 @@ interface ChatMessage {
 })
 export class ChatComponent {
   history: Contents;
+  fileSet: Files[] = [];
 
   message: string = '';
 
@@ -42,6 +49,34 @@ export class ChatComponent {
     }
   }
 
+  fileChange(event: any) {
+    const input = event.target as HTMLInputElement;
+    this.fileSet = [];
+    if (input.files && input.files.length > 0) {
+      for (let i = 0; i < input.files.length; i++) {
+        const file = input.files[i];
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const base64String = reader.result as string;
+
+          this.fileSet.push({
+            name: file.name,
+            mimeType: base64String.split(';')[0].replace('data:', ''),
+            data: base64String.split(',')[1],
+          });
+        };
+
+        reader.onerror = (error) => {
+          console.error('Erro ao ler o arquivo:', error);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
   chatQuest() {
     if (this.message == '') {
       this.openDialog('Opps!', 'Por favor realize uma pergunta');
@@ -54,6 +89,14 @@ export class ChatComponent {
       role: 'user',
       parts: [{ text: this.message }],
     });
+
+    for (let i = 0; i < this.fileSet.length; i++) {
+      const file = this.fileSet[i];
+      this.history.contents.push({
+        role: 'user',
+        parts: [{ inlineData: file }],
+      });
+    }
 
     this.http.POST('chat', { history: this.history }).subscribe(
       (res: any) => {

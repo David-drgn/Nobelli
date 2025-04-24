@@ -1,12 +1,26 @@
 <div class="container">
     <div class="chat" #chatContainer>
+        <div class="card user">
+            <div class="fileView">
+                <span>Exemplo foda.pdf</span>
+                <mat-icon matTooltip="Clique para ver o arquivo" fontIcon="visibility"></mat-icon>
+            </div>
+        </div>
         <div [class]="item.role == 'user'? 'card user' : 'card bot'" *ngFor="let item of history.contents">
-            <span [innerHTML]="item.parts[0].text"></span>
+            <span [innerHTML]="item.parts[0].text" *ngIf="item.parts[0].text"></span>
+            <div class="fileView" *ngIf="!item.parts[0].text">
+                <span [innerHTML]="item.parts[0].inlineData?.name"></span>
+                <mat-icon matTooltip="Clique para ver o arquivo" fontIcon="visibility"></mat-icon>
+            </div>
         </div>
     </div>
     <div class="input">
         <input type="text" placeholder="Faça uma pergunta ou peça para ele puxar dados de um produto"
             [(ngModel)]="message" (keydown.enter)="chatQuest()">
-        <mat-icon fontIcon="search" (click)="chatQuest()"></mat-icon>
+        <mat-icon fontIcon="attach_file" (click)="fileSet.click()"></mat-icon>
+        <mat-icon fontIcon="send" (click)="chatQuest()"></mat-icon>
+        <input
+            accept=".pdf, .xls, .xlsx, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            type="file" #fileSet style="display: none;" (change)="fileChange($event)" multiple>
     </div>
 </div>

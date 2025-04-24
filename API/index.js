@@ -15,10 +15,10 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT;
 
-app.use(express.json());
+app.use(express.json({ limit: "1gb" }));
+app.use(express.urlencoded({ extended: true, limit: "1gb" }));
 app.use(cors());
 app.use(cookieParser());
-app.use(bodyParser.json({ limit: "20mb" }));
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY_GEMINI);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -74,8 +74,22 @@ app.post("/api/chat", async (req, res) => {
       },
     ];
 
+    const filteredContents = history.contents.map((message) => ({
+      ...message,
+      parts: message.parts.map((part) => {
+        if (part.inlineData) {
+          const { name, ...rest } = part.inlineData;
+          return {
+            ...part,
+            inlineData: rest,
+          };
+        }
+        return part;
+      }),
+    }));
+
     const result = await model.generateContent({
-      contents: [...systemPrompt, ...history.contents],
+      contents: [...systemPrompt, ...filteredContents],
     });
 
     let response = result.response.text();

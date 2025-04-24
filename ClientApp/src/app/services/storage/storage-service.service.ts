@@ -8,6 +8,13 @@ interface Contents {
 interface ChatMessage {
   role: 'user' | 'model';
   parts: { text: string }[];
+  files?: [
+    {
+      content: string;
+      mimeType: string;
+      name: string;
+    }
+  ];
 }
 
 @Injectable({
@@ -19,7 +26,7 @@ export class StorageServiceService {
 
   search = new BehaviorSubject<string>('');
   infoSection = new BehaviorSubject<any>(null);
-  
+
   theme = new BehaviorSubject<string | null>(null);
 
   chatHistory = new BehaviorSubject<Contents>({
