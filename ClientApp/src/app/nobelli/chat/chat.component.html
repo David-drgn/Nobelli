@@ -1,26 +1,41 @@
 <div class="container">
     <div class="chat" #chatContainer>
-        <div class="card user">
-            <div class="fileView">
-                <span>Exemplo foda.pdf</span>
-                <mat-icon matTooltip="Clique para ver o arquivo" fontIcon="visibility"></mat-icon>
-            </div>
-        </div>
         <div [class]="item.role == 'user'? 'card user' : 'card bot'" *ngFor="let item of history.contents">
             <span [innerHTML]="item.parts[0].text" *ngIf="item.parts[0].text"></span>
-            <div class="fileView" *ngIf="!item.parts[0].text">
-                <span [innerHTML]="item.parts[0].inlineData?.name"></span>
-                <mat-icon matTooltip="Clique para ver o arquivo" fontIcon="visibility"></mat-icon>
+            <div class="fileView" *ngIf="!item.parts[0].text && item.parts[0].inlineData?.name">
+                <span [innerHTML]="item.parts[0].inlineData?.name"
+                    *ngIf="!item.parts[0].inlineData?.name?.includes('webm')"></span>
+                <mat-icon *ngIf="!item.parts[0].inlineData?.name?.includes('webm')"
+                    matTooltip="Clique para ver o arquivo" (click)="viewFileRegister(item.parts[0].inlineData)"
+                    fontIcon="visibility"></mat-icon>
+                <audio *ngIf="item.parts[0].inlineData?.name?.includes('webm')" controls>
+                    <source
+                        [src]="'data:' + item.parts[0].inlineData?.mimeType + ';base64,' + item.parts[0].inlineData?.data"
+                        [type]="item.parts[0].inlineData?.mimeType" />
+                    Seu navegador não suporta o elemento de áudio.
+                </audio>
             </div>
         </div>
     </div>
-    <div class="input">
-        <input type="text" placeholder="Faça uma pergunta ou peça para ele puxar dados de um produto"
+    <div [class]="i == 0? 'fileAnex' : 'fileAnex_mult'" *ngFor="let file of fileSet; let i = index">
+        <span>{{file.name}}</span>
+        <mat-icon [matTooltip]="'Clique para excluir o arquivo ' + file.name" fontIcon="delete"
+            (click)="deleteFile(i)"></mat-icon>
+        <mat-icon [matTooltip]="'Clique para ver o arquivo ' + file.name" fontIcon="visibility"
+            (click)="viewFile(i)"></mat-icon>
+    </div>
+    <div [class]="fileSet.length > 0 ? 'input_with_file' : 'input'">
+        <input *ngIf="!audioUrl" type="text" placeholder="Faça uma pergunta ou peça para ele puxar dados de um produto"
             [(ngModel)]="message" (keydown.enter)="chatQuest()">
-        <mat-icon fontIcon="attach_file" (click)="fileSet.click()"></mat-icon>
+        <audio *ngIf="audioUrl" [src]="audioUrl" controls></audio>
+        <mat-icon fontIcon="attach_file" (click)="fileInput.click()"></mat-icon>
+        <mat-icon fontIcon="mic" *ngIf="!isRecording && !audioUrl" (click)="startRecording()"></mat-icon>
+        <mat-icon fontIcon="mic_off" *ngIf="isRecording && !audioUrl" (click)="stopRecording()"></mat-icon>
+        <mat-icon fontIcon="delete" *ngIf="audioUrl" (click)="deleteRecording()"></mat-icon>
         <mat-icon fontIcon="send" (click)="chatQuest()"></mat-icon>
         <input
-            accept=".pdf, .xls, .xlsx, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            type="file" #fileSet style="display: none;" (change)="fileChange($event)" multiple>
+            accept=".pdf,.xls,.xlsx,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/png,image/jpeg,image/jpg"
+            type="file" #fileInput style="display: none;" (change)="fileChange($event)" multiple>
+        <div>
+        </div>
     </div>
-</div>

@@ -1,0 +1,5 @@
+<div class="wrapper_alert">
+    <span class="title"><mat-icon (click)="close()" fontIcon="close"></mat-icon> {{data.name}}</span>
+    <iframe #iframeRef frameborder="0" style="margin: 20px;"></iframe>
+    <div #divRef style="overflow: auto;" [innerHTML]="htmlExcel"></div>
+</div>

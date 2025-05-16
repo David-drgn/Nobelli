@@ -23,6 +23,31 @@ app.use(cookieParser());
 const genAI = new GoogleGenerativeAI(process.env.API_KEY_GEMINI);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
+async function extrairTextoDoExcel(base64) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(bytes.buffer);
+
+  let textoCompleto = "";
+
+  workbook.eachSheet((worksheet) => {
+    worksheet.eachRow((row) => {
+      const rowText = row.values
+        .slice(1)
+        .map((cell) => (cell != null ? String(cell) : ""))
+        .join(" ");
+      textoCompleto += rowText + "\n";
+    });
+  });
+
+  return textoCompleto;
+}
+
 //Gemini
 
 app.post("/api/chat", async (req, res) => {
@@ -64,6 +89,9 @@ app.post("/api/chat", async (req, res) => {
           {
             text: `
           FORMATE AS RESPOSTAS EM HTML, USANDO TAGS, ISSO É OBRIGATÓRIO.
+          DEIXE O TEXTO SEMPRE LEGIVEL EM HTML, IREI IDENTAR ESSE CÓDIGO AO MEU
+          NUNCA CITE HTML, OU QUALQUER OUTRA COISA QUE NÃO SEJA SOBRE OS ARQUIVOS ENVIADOS, OU DADOS DO BD
+          PARE DE PULAR LINHA NA PRIMEIRA LINHA DAS SUAS RESPOSTAS
           SEMPRE FORMATE AS DATAS PARA O MODELO dd/mm/yy hh:mm ou dd/mm/yy caso possível
           NUNCA PASSE O ID PRIMÁRIO DOS REGISTROS, ISTO É CONFIDENCIAL
           Você é uma assistente virtual treinada para ajudar funcionários da Nobelli.
@@ -74,7 +102,7 @@ app.post("/api/chat", async (req, res) => {
       },
     ];
 
-    const filteredContents = history.contents.map((message) => ({
+    let filteredContents = history.contents.map((message) => ({
       ...message,
       parts: message.parts.map((part) => {
         if (part.inlineData) {
@@ -87,6 +115,42 @@ app.post("/api/chat", async (req, res) => {
         return part;
       }),
     }));
+
+    let i = 0;
+    while (i < filteredContents.length) {
+      const message = filteredContents[i];
+      const isExcel = message.parts.some((part) => {
+        const mimeType = part.inlineData?.mimeType;
+        return [
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "application/vnd.ms-excel",
+        ].includes(mimeType);
+      });
+
+      if (isExcel) {
+        const base64 = message.parts.find((part) => part.inlineData)?.inlineData
+          .data;
+        const text = await extrairTextoDoExcel(base64);
+        filteredContents.splice(i + 1, 0, {
+          role: "user",
+          parts: [{ text }],
+        });
+        filteredContents.splice(i, 1);
+      } else {
+        i++;
+      }
+    }
+
+    filteredContents = filteredContents.filter(
+      (message) =>
+        !message.parts.some((part) => {
+          const mimeType = part.inlineData?.mimeType;
+          return [
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-excel",
+          ].includes(mimeType);
+        })
+    );
 
     const result = await model.generateContent({
       contents: [...systemPrompt, ...filteredContents],
@@ -895,11 +959,17 @@ app.get("/api/eventGet/:token", async (req, res) => {
       .select("*, cliente(*), funcionario(*), servico(*)")
       .order("datainicio", { ascending: true });
 
-    if (error) throw error;
+    let { data: dataCliente, error: errorCliente } = await supabase
+      .from("cliente")
+      .select("nome, data_nasc")
+      .order("data_nasc", { ascending: true });
+
+    if (error || errorCliente) throw "Erro ao buscar";
 
     res.status(200).json({
       erro: false,
       data,
+      clientes: dataCliente,
     });
   } catch (error) {
     res.status(500).json({

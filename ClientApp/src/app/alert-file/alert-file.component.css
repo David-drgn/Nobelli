@@ -1,0 +1,26 @@
+.wrapper_alert {
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  background: var(--back-color);
+  position: relative;
+  color: var(--primary-color);
+}
+
+.title {
+  display: flex;
+  gap: 5px;
+  mat-icon {
+    color: var(--second-color);
+    cursor: pointer;
+    transition: all 1s;
+    background-color: var(--primary-color);
+    border-radius: 100%;
+    padding: 2px;
+  }
+  mat-icon:hover {
+    rotate: 360deg;
+    font-weight: bolder;
+  }
+}

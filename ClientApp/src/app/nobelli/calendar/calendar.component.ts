@@ -197,6 +197,27 @@ export class CalendarComponent {
           //     element.remove();
           //   });
 
+          res.clientes.forEach((e: any) => {
+            if (e.data_nasc) {
+              const nascimento = e.data_nasc;
+
+              const [_, mes, dia] = nascimento.split('-');
+              const anoAtual = new Date().getFullYear();
+
+              for (let i = 0; i < 5; i++) {
+                const novoAno = anoAtual + i;
+                const novaData = `${novoAno}-${mes}-${dia}`;
+
+                this.calendarObj.addEvent({
+                  title: `Aniversário de ${e.nome}`,
+                  start: `${novaData}T15:34:00`,
+                  allDay: true,
+                  titleTooltip: `Cliente: ${e.nome} \nAniversário desse cliente hoje`,
+                });
+              }
+            }
+          });
+
           this.list.forEach((e: any) => {
             const eventosDoCliente = this.gerarEventosSemanais(e);
             console.log(eventosDoCliente);

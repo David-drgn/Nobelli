@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { AlertFileComponent } from 'src/app/alert-file/alert-file.component';
 import { AlertComponent } from 'src/app/alert/alert.component';
 import { HttpServiceService } from 'src/app/services/http/http-service.service';
 import { StorageServiceService } from 'src/app/services/storage/storage-service.service';
@@ -25,6 +26,11 @@ interface ChatMessage {
   styleUrls: ['./chat.component.css'],
 })
 export class ChatComponent {
+  mediaRecorder!: MediaRecorder;
+  audioChunks: Blob[] = [];
+  audioUrl: string | null = null;
+  isRecording = false;
+
   history: Contents;
   fileSet: Files[] = [];
 
@@ -47,6 +53,32 @@ export class ChatComponent {
     } catch (err) {
       console.error('Erro ao rolar o chat:', err);
     }
+  }
+
+  async startRecording() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    this.mediaRecorder = new MediaRecorder(stream);
+    this.audioChunks = [];
+
+    this.mediaRecorder.ondataavailable = (event: BlobEvent) => {
+      if (event.data.size > 0) {
+        this.audioChunks.push(event.data);
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+        this.audioUrl = URL.createObjectURL(audioBlob);
+      }
+    };
+
+    this.mediaRecorder.start(500);
+    this.isRecording = true;
+  }
+
+  stopRecording() {
+    this.mediaRecorder.stop();
+    this.isRecording = false;
+  }
+
+  deleteRecording() {
+    this.audioUrl = null;
   }
 
   fileChange(event: any) {
@@ -77,11 +109,58 @@ export class ChatComponent {
     }
   }
 
-  chatQuest() {
-    if (this.message == '') {
+  deleteFile(index: number) {
+    this.fileSet.splice(index, 1);
+  }
+
+  viewFile(index: number) {
+    const dialogRef = this.dialog.open(AlertFileComponent, {
+      data: {
+        name: this.fileSet[index].name,
+        data: this.fileSet[index].data,
+        mimeType: this.fileSet[index].mimeType,
+      },
+    });
+  }
+
+  viewFileRegister(file: Files | undefined) {
+    if (file) {
+      const dialogRef = this.dialog.open(AlertFileComponent, {
+        data: {
+          name: file.name,
+          data: file.data,
+          mimeType: file.mimeType,
+        },
+      });
+    }
+  }
+
+  async chatQuest() {
+    if (this.message == '' && !this.audioUrl) {
       this.openDialog('Opps!', 'Por favor realize uma pergunta');
       return;
     }
+
+    const blobToBase64 = (blob: Blob): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () =>
+          resolve(reader.result!.toString().split(',')[1]); // remove data:mime;base64,
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    };
+
+    const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+
+    const base64Data = await blobToBase64(audioBlob);
+    const audioFile: Files = {
+      data: base64Data,
+      mimeType: 'audio/webm',
+      name: 'gravacao.webm',
+    };
+
+    this.fileSet.push(audioFile);
 
     this.storage.load.next(true);
 
@@ -101,8 +180,9 @@ export class ChatComponent {
     this.http.POST('chat', { history: this.history }).subscribe(
       (res: any) => {
         this.storage.load.next(false);
-        console.log(res);
+        this.audioUrl = null;
         this.message = '';
+        this.fileSet = [];
         if (res.erro) {
           this.openDialog(
             'Ops!',
