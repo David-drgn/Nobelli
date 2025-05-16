@@ -8,7 +8,7 @@
                 <mat-icon *ngIf="!item.parts[0].inlineData?.name?.includes('webm')"
                     matTooltip="Clique para ver o arquivo" (click)="viewFileRegister(item.parts[0].inlineData)"
                     fontIcon="visibility"></mat-icon>
-                <audio *ngIf="item.parts[0].inlineData?.name?.includes('webm')" controls>
+                <audio *ngIf="item.parts[0].inlineData?.name?.includes('webm')" controls style="min-width: 300px !important;">
                     <source
                         [src]="'data:' + item.parts[0].inlineData?.mimeType + ';base64,' + item.parts[0].inlineData?.data"
                         [type]="item.parts[0].inlineData?.mimeType" />
