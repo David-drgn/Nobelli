@@ -141,26 +141,28 @@ export class ChatComponent {
       return;
     }
 
-    const blobToBase64 = (blob: Blob): Promise<string> => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () =>
-          resolve(reader.result!.toString().split(',')[1]); // remove data:mime;base64,
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    };
+    if (this.audioUrl) {
+      const blobToBase64 = (blob: Blob): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () =>
+            resolve(reader.result!.toString().split(',')[1]); // remove data:mime;base64,
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      };
 
-    const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+      const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
 
-    const base64Data = await blobToBase64(audioBlob);
-    const audioFile: Files = {
-      data: base64Data,
-      mimeType: 'audio/webm',
-      name: 'gravacao.webm',
-    };
+      const base64Data = await blobToBase64(audioBlob);
+      const audioFile: Files = {
+        data: base64Data,
+        mimeType: 'audio/webm',
+        name: 'gravacao.webm',
+      };
 
-    this.fileSet.push(audioFile);
+      this.fileSet.push(audioFile);
+    }
 
     this.storage.load.next(true);
 
